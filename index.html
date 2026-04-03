@@ -292,12 +292,24 @@ window.addEventListener('load', () => {
         upBtn.addEventListener('click', () => moveShooter(index, -1));
         div.appendChild(upBtn);
       }
-      if (index < shooters.length - 1) {
+     if (index < shooters.length - 1) {
         const downBtn = document.createElement('button');
         downBtn.textContent = '↓';
         downBtn.addEventListener('click', () => moveShooter(index, 1));
         div.appendChild(downBtn);
       }
+
+      const removeBtn = document.createElement('button');
+      removeBtn.textContent = '✕';
+      removeBtn.style.background = '#dc3545';
+      removeBtn.addEventListener('click', () => {
+        shooters.splice(index, 1);
+        if (shooters.length === 0) startBtn.classList.add('hidden');
+        renderShooterList();
+        saveSessionToLocal();
+      });
+      div.appendChild(removeBtn);
+
       shooterListDiv.appendChild(div);
     });
   }
