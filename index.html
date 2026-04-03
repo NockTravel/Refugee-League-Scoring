@@ -386,6 +386,7 @@ window.addEventListener('load', () => {
     renderShooterList();
     shooterNameInput.value = '';
     shooterHandicapInput.value = '';
+    shooterDivisionSelect.value = 'Overall';
     if (shooters.length > 0) startBtn.classList.remove('hidden');
     saveSessionToLocal();
   });
