@@ -117,7 +117,7 @@
 
 <script>
 let shooters = [];
-let divisions = [];
+let divisions = ['Open', 'A Grade', 'B Grade'];
 let shotsPerEnd = 3;
 let scoreButtons = [];
 let scoreMap = {};
@@ -697,6 +697,7 @@ window.addEventListener('load', () => {
   // ── Init ──────────────────────────────────────────────────────────────────
 
   loadArchersFromSheet();
+  renderDivisionList();
   renderShooterDivisionOptions();
   loadSessionFromLocal();
 
