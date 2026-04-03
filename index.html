@@ -7,10 +7,12 @@
 <style>
   body { font-family: Arial, sans-serif; margin:0; padding:0.5rem; background:#f7f7f7; }
   h1,h2,h3 { text-align:center; }
-  #setup,#scoring,#results,#config { max-width:650px; margin:0 auto; }
+  #setup,#scoring,#results { max-width:650px; margin:0 auto; }
   .hidden { display:none; }
   .shooter, .division { background:white; margin:1rem 0; padding:1rem; border-radius:10px; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
-  .shooter-name, .division-name { font-weight:bold; font-size:1.2rem; margin-bottom:0.5rem; word-wrap:break-word; }
+  .shooter-name, .division-name { font-weight:bold; font-size:1.2rem; margin-bottom:0.5rem; word-wrap:break-word; display:flex; justify-content:space-between; align-items:center; }
+  .reorder-buttons { display:flex; gap:0.3rem; }
+  .reorder-buttons button { padding:0.3rem 0.6rem; font-size:0.9rem; background:#6c757d; min-height:auto; }
   .score-buttons { display:grid; grid-template-columns:repeat(4,1fr); gap:0.4rem; margin-bottom:0.5rem; }
   @media (min-width: 500px) {
     .score-buttons { grid-template-columns:repeat(6,1fr); }
@@ -61,24 +63,10 @@
   .status.success { background:#d4edda; color:#155724; }
   .status.error { background:#f8d7da; color:#721c24; }
   .status.info { background:#d1ecf1; color:#0c5460; }
-  #configBtn { position:fixed; top:10px; right:10px; background:#6c757d; padding:0.5rem 1rem; }
 </style>
 </head>
 <body>
-<button id="configBtn">⚙️ Config</button>
 <h1>Archery Session Scoring</h1>
-
-<!-- Config Screen -->
-<div id="config" class="hidden">
-  <h2>Configuration</h2>
-  <label>Google API Key:</label>
-  <input type="text" id="apiKey" placeholder="Your Google Sheets API Key" style="width:90%;">
-  <label>Google Sheet ID:</label>
-  <input type="text" id="sheetId" placeholder="Your Sheet ID from URL" style="width:90%;">
-  <button class="add" id="saveConfig" style="width:100%;">Save & Load Data</button>
-  <button id="closeConfig" style="width:100%; background:#6c757d;">Close</button>
-  <div id="configStatus"></div>
-</div>
 
 <!-- Setup Screen -->
 <div id="setup">
@@ -146,15 +134,13 @@ let shotsPerEnd = 3;
 let scoreButtons = [];
 let scoreMap = {};
 let archersData = [];
-let apiKey = 'AIzaSyBHp5r6Mki5F-09oCFQWrgGSX7U7UE2Q04';
-let sheetId = '1s45hcXeV5rR2P5pUmy3NpT3buikuoHGFNvSWufHxITg';
+let selectedRound = '';
 let appsScriptUrl = 'https://script.google.com/macros/s/AKfycbwg6DJcRaLo3QtJTAS0RQFKQXD3LdvaMGWeeu5AYz0-U80Zkrr-AH-CE97KK4I8Yauk/exec';
 
 window.addEventListener('load', () => {
   const setupDiv = document.getElementById('setup');
   const scoringDiv = document.getElementById('scoring');
   const resultsDiv = document.getElementById('results');
-  const configDiv = document.getElementById('config');
   const shooterListDiv = document.getElementById('shooterList');
   const scorersDiv = document.getElementById('scorers');
   const divisionListDiv = document.getElementById('divisionList');
@@ -168,45 +154,79 @@ window.addEventListener('load', () => {
   const shooterNameInput = document.getElementById('shooterName');
   const shooterHandicapInput = document.getElementById('shooterHandicap');
 
-  // Config
-  document.getElementById('configBtn').addEventListener('click', () => {
-    configDiv.classList.toggle('hidden');
-    document.getElementById('apiKey').value = apiKey;
-    document.getElementById('sheetId').value = sheetId;
-  });
-
-  document.getElementById('closeConfig').addEventListener('click', () => {
-    configDiv.classList.add('hidden');
-  });
-
-  document.getElementById('saveConfig').addEventListener('click', async () => {
-    apiKey = document.getElementById('apiKey').value.trim();
-    sheetId = document.getElementById('sheetId').value.trim();
-    if (!apiKey || !sheetId) {
-      showStatus('configStatus', 'Please enter both API Key and Sheet ID', 'error');
-      return;
+  function saveSessionToLocal() {
+    try {
+      localStorage.setItem('archerySession', JSON.stringify({
+        shooters,
+        divisions,
+        shotsPerEnd,
+        scoreButtons,
+        scoreMap,
+        selectedRound,
+        timestamp: new Date().toISOString()
+      }));
+    } catch (e) {
+      console.error('Failed to save session:', e);
     }
-    showStatus('configStatus', 'Loading archers data...', 'info');
-    await loadArchersFromSheet();
-    configDiv.classList.add('hidden');
-  });
+  }
+
+  function loadSessionFromLocal() {
+    try {
+      const saved = localStorage.getItem('archerySession');
+      if (!saved) return false;
+      
+      const data = JSON.parse(saved);
+      const savedTime = new Date(data.timestamp);
+      const hoursSince = (new Date() - savedTime) / (1000 * 60 * 60);
+      
+      if (hoursSince > 12) {
+        localStorage.removeItem('archerySession');
+        return false;
+      }
+      
+      shooters = data.shooters || [];
+      divisions = data.divisions || [];
+      shotsPerEnd = data.shotsPerEnd || 3;
+      scoreButtons = data.scoreButtons || [];
+      scoreMap = data.scoreMap || {};
+      selectedRound = data.selectedRound || '';
+      
+      if (shooters.length > 0) {
+        showStatus('setupStatus', `⚠ Restored previous session from ${savedTime.toLocaleTimeString()}`, 'info');
+        renderShooterList();
+        startBtn.classList.remove('hidden');
+        
+        if (shooters.some(s => s.scores && s.scores.length > 0)) {
+          setupDiv.classList.add('hidden');
+          scoringDiv.classList.remove('hidden');
+          renderScoringScreen();
+          shooters.forEach(s => updateDisplay(s.id));
+        }
+        
+        return true;
+      }
+      return false;
+    } catch (e) {
+      console.error('Failed to load session:', e);
+      return false;
+    }
+  }
+
+  function clearSessionLocal() {
+    localStorage.removeItem('archerySession');
+  }
 
   async function loadArchersFromSheet() {
     try {
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Archers!A2:E?key=${apiKey}`;
+      const url = `${appsScriptUrl}?action=getArchers`;
       const response = await fetch(url);
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error?.message || 'Failed to load archers');
-      }
       const data = await response.json();
-      archersData = (data.values || []).map(row => ({
-        uid: row[0],
-        firstName: row[1] || '',
-        lastName: row[2] || '',
-        grade: row[3] || 'Overall',
-        handicap: row[4] || ''
-      }));
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to load archers');
+      }
+      
+      archersData = data.archers || [];
       console.log('Loaded archers:', archersData);
       showStatus('setupStatus', `✓ Loaded ${archersData.length} archers from sheet`, 'success');
       setTimeout(() => document.getElementById('setupStatus').innerHTML = '', 3000);
@@ -216,7 +236,6 @@ window.addEventListener('load', () => {
     }
   }
 
-  // Autocomplete for shooter names
   shooterNameInput.addEventListener('input', function() {
     console.log('Input triggered, value:', this.value, 'archersData length:', archersData.length);
     closeAllLists();
@@ -245,16 +264,17 @@ window.addEventListener('load', () => {
       itemDiv.innerHTML = `<strong>${fullName}</strong> <small>(UID: ${archer.uid} | ${archer.grade}${archer.handicap ? ' | Hcp: ' + archer.handicap : ''})</small>`;
       itemDiv.addEventListener('click', function() {
         shooterNameInput.value = fullName;
-        shooterHandicapInput.value = archer.handicap;
         
-        // Set division to match their grade - add it to divisions list if not there
+        const selectedZone = scoreZoneSelect.value;
+        const handicapToUse = selectedZone === '11-M' ? (archer.handicap11M || archer.handicap) : archer.handicap;
+        shooterHandicapInput.value = handicapToUse;
+        
         if (!divisions.includes(archer.grade) && archer.grade !== 'Overall') {
           divisions.push(archer.grade);
           renderDivisionList();
           renderShooterDivisionOptions();
         }
         
-        // Select the correct division in dropdown
         for (let i = 0; i < shooterDivisionSelect.options.length; i++) {
           if (shooterDivisionSelect.options[i].value === archer.grade) {
             shooterDivisionSelect.selectedIndex = i;
@@ -325,6 +345,7 @@ window.addEventListener('load', () => {
     if(newIndex < 0 || newIndex >= shooters.length) return;
     [shooters[index], shooters[newIndex]] = [shooters[newIndex], shooters[index]];
     renderShooterList();
+    saveSessionToLocal();
   }
 
   function renderShooterDivisionOptions() {
@@ -354,6 +375,7 @@ window.addEventListener('load', () => {
     renderDivisionList();
     renderShooterDivisionOptions();
     document.getElementById('divisionName').value='';
+    saveSessionToLocal();
   });
 
   document.getElementById('addShooter').addEventListener('click', async ()=>{
@@ -362,16 +384,15 @@ window.addEventListener('load', () => {
     const division=shooterDivisionSelect.value;
     if(!name) return;
     
-    // Check if this is a new archer (not in archersData)
-    const existingArcher = archersData.find(a => 
-      `${a.firstName} ${a.lastName}`.toLowerCase() === name.toLowerCase()
-    );
+    const nameLower = name.toLowerCase().trim().replace(/\s+/g, ' ');
+    const existingArcher = archersData.find(a => {
+      const fullName = `${a.firstName} ${a.lastName}`.toLowerCase().trim().replace(/\s+/g, ' ');
+      return fullName === nameLower;
+    });
     
     if (!existingArcher && appsScriptUrl) {
-      // This is a new archer - add them to the Archers sheet
       showStatus('setupStatus', 'Adding new archer to database...', 'info');
       
-      // Split name into first and last
       const nameParts = name.split(' ');
       const firstName = nameParts[0] || '';
       const lastName = nameParts.slice(1).join(' ') || '';
@@ -390,8 +411,6 @@ window.addEventListener('load', () => {
           })
         });
         
-        // no-cors mode means we can't read the response, but that's ok
-        // Reload archers to get the new one with UID
         await loadArchersFromSheet();
         
         showStatus('setupStatus', `✓ Added ${name} to database`, 'success');
@@ -408,11 +427,13 @@ window.addEventListener('load', () => {
     shooterNameInput.value='';
     shooterHandicapInput.value='';
     if(shooters.length>0) startBtn.classList.remove('hidden');
+    saveSessionToLocal();
   });
 
   startBtn.addEventListener('click',()=>{
     shotsPerEnd=parseInt(document.getElementById('shotsPerEnd').value,10);
-    let selectedZone = scoreZoneSelect.value;
+    selectedRound = scoreZoneSelect.value;
+    let selectedZone = selectedRound;
     if(selectedZone==='Other'){
       const custom=customInput.value.split(',').map(s=>s.trim()).filter(s=>s);
       scoreButtons=custom;
@@ -434,18 +455,42 @@ window.addEventListener('load', () => {
     setupDiv.classList.add('hidden');
     scoringDiv.classList.remove('hidden');
     renderScoringScreen();
+    saveSessionToLocal();
   });
 
   function renderScoringScreen(){
     scorersDiv.innerHTML='';
-    shooters.forEach(shooter=>{
+    shooters.forEach((shooter, index)=>{
       const shooterId = shooter.id;
       const div=document.createElement('div');
       div.className='shooter';
-      const name=document.createElement('div');
-      name.className='shooter-name';
-      name.textContent=`${shooter.name} (${shooter.division}${shooter.handicap ? ' – Hcp:'+shooter.handicap : ''})`;
-      div.appendChild(name);
+      
+      const nameDiv=document.createElement('div');
+      nameDiv.className='shooter-name';
+      
+      const nameSpan=document.createElement('span');
+      nameSpan.textContent=`${shooter.name} (${shooter.division}${shooter.handicap ? ' – Hcp:'+shooter.handicap : ''})`;
+      nameDiv.appendChild(nameSpan);
+      
+      const reorderDiv=document.createElement('div');
+      reorderDiv.className='reorder-buttons';
+      
+      if(index > 0){
+        const upBtn=document.createElement('button');
+        upBtn.textContent='↑';
+        upBtn.addEventListener('click',()=>moveScoringShooter(index, -1));
+        reorderDiv.appendChild(upBtn);
+      }
+      
+      if(index < shooters.length - 1){
+        const downBtn=document.createElement('button');
+        downBtn.textContent='↓';
+        downBtn.addEventListener('click',()=>moveScoringShooter(index, 1));
+        reorderDiv.appendChild(downBtn);
+      }
+      
+      nameDiv.appendChild(reorderDiv);
+      div.appendChild(nameDiv);
 
       const arrowsDiv=document.createElement('div');
       arrowsDiv.className='arrows';
@@ -477,12 +522,22 @@ window.addEventListener('load', () => {
       scorersDiv.appendChild(div);
     });
   }
+  
+  function moveScoringShooter(index, direction) {
+    const newIndex = index + direction;
+    if(newIndex < 0 || newIndex >= shooters.length) return;
+    [shooters[index], shooters[newIndex]] = [shooters[newIndex], shooters[index]];
+    renderScoringScreen();
+    shooters.forEach(s => updateDisplay(s.id));
+    saveSessionToLocal();
+  }
 
   function addScore(shooterId,label){
     const shooter=shooters.find(s=>s.id===shooterId);
     if(!shooter) return;
     shooter.scores.push({label,value:scoreMap[label]??0});
     updateDisplay(shooterId);
+    saveSessionToLocal();
   }
 
   function undoScore(shooterId){
@@ -490,6 +545,7 @@ window.addEventListener('load', () => {
     if(!shooter || shooter.scores.length===0) return;
     shooter.scores.pop();
     updateDisplay(shooterId);
+    saveSessionToLocal();
     if(!resultsDiv.classList.contains('hidden')){
       showResults();
     }
@@ -525,9 +581,10 @@ window.addEventListener('load', () => {
     resultsDiv.classList.remove('hidden');
     showResults();
     
-    // Write to Google Sheet
     showStatus('resultsStatus', 'Saving scores to Google Sheets...', 'info');
     await writeScoresToSheet();
+    
+    clearSessionLocal();
   });
 
   async function writeScoresToSheet() {
@@ -547,21 +604,24 @@ window.addEventListener('load', () => {
         const hcapVal = parseFloat(shooter.handicap) || 0;
         const hcapScore = total + hcapVal;
         
-        // Find UID from archersData
+        const elevenMScore = selectedRound === '11-M' ? total : '';
+        
         const archerMatch = archersData.find(a => 
           `${a.firstName} ${a.lastName}`.toLowerCase().trim() === shooter.name.toLowerCase().trim()
         );
         const uid = archerMatch ? archerMatch.uid : '';
         
-        console.log('Writing score for:', shooter.name, 'UID:', uid, 'Score:', total);
+        console.log('Writing score for:', shooter.name, 'UID:', uid, 'Score:', total, 'Round:', selectedRound);
         scores.push({
           date: today,
           uid: uid,
           score: total,
           xCount: xCount,
           x10Count: x10Count,
-          handicapScore: hcapScore,  // Score + Handicap (e.g., 285 + 5.8 = 290.8)
-          sessionInfo: `Week ${new Date().getWeek()}`
+          handicapScore: hcapScore,
+          sessionInfo: `Week ${new Date().getWeek()}`,
+          elevenMScore: elevenMScore,
+          roundSelected: selectedRound
         });
       });
 
@@ -577,7 +637,6 @@ window.addEventListener('load', () => {
         })
       });
 
-      // no-cors means we can't read response, but assume success
       console.log('Scores sent to Apps Script');
       showStatus('resultsStatus', `✓ Scores saved to Google Sheets successfully! (${scores.length} entries)`, 'success');
     } catch (error) {
@@ -586,7 +645,6 @@ window.addEventListener('load', () => {
     }
   }
 
-  // Helper to get week number
   Date.prototype.getWeek = function() {
     const d = new Date(Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()));
     const dayNum = d.getUTCDay() || 7;
@@ -755,12 +813,39 @@ window.addEventListener('load', () => {
   });
 
   document.getElementById('newSession').addEventListener('click',()=>{
-    location.reload();
+    if (confirm('Start a new session? This will clear all current data.')) {
+      clearSessionLocal();
+      location.reload();
+    }
   });
 
-  // Load archers on startup
   loadArchersFromSheet();
   renderShooterDivisionOptions();
+  
+  loadSessionFromLocal();
+  
+  window.addEventListener('beforeunload', (e) => {
+    const hasUnsavedScores = shooters.some(s => s.scores && s.scores.length > 0);
+    const isInScoringMode = !scoringDiv.classList.contains('hidden');
+    
+    if (hasUnsavedScores || isInScoringMode) {
+      e.preventDefault();
+      e.returnValue = '';
+      return '';
+    }
+  });
+  
+  window.history.pushState(null, '', window.location.href);
+  window.addEventListener('popstate', () => {
+    const hasUnsavedScores = shooters.some(s => s.scores && s.scores.length > 0);
+    if (hasUnsavedScores) {
+      if (confirm('You have unsaved scores. Are you sure you want to go back?')) {
+        window.history.back();
+      } else {
+        window.history.pushState(null, '', window.location.href);
+      }
+    }
+  });
 });
 </script>
 </body>
