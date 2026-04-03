@@ -640,9 +640,13 @@ window.addEventListener('load', () => {
       renderDivision(div, divShooters, sortByHandicap);
     });
 
+    // Handicap division — anyone with a handicap value, sorted by handicap total
+    const handicapShooters = shooters.filter(s => s.handicap && s.handicap.trim() !== '');
+    renderDivision('Handicap', handicapShooters, true);
+
     // Catch anyone not assigned to a known division
     const unranked = shooters.filter(s => !divisions.includes(s.division));
-    renderDivision('Unranked', unranked, false);
+    renderDivision('Unranked', unranked, true);
   }
 
   // ── Export CSV ────────────────────────────────────────────────────────────
