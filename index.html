@@ -585,16 +585,6 @@ window.addEventListener('load', () => {
 
   function showResults() {
     resultsContainer.innerHTML = '';
-    const manualDivisions = divisions.length > 0 ? divisions : [];
-    const shootersInManualDivs = [], bGradeShooters = [], handicapShooters = [], unrankedShooters = [];
-
-    shooters.forEach(s => {
-      const hasHandicap = s.handicap && s.handicap.trim() !== '';
-      if (manualDivisions.includes(s.division)) shootersInManualDivs.push(s);
-      else if (hasHandicap) bGradeShooters.push(s);
-      else unrankedShooters.push(s);
-      if (hasHandicap) handicapShooters.push(s);
-    });
 
     function renderDivision(divName, list, sortByHandicap = false) {
       if (list.length === 0) return;
@@ -643,10 +633,16 @@ window.addEventListener('load', () => {
       });
     }
 
-    manualDivisions.forEach(div => renderDivision(div, shootersInManualDivs.filter(s => s.division === div), false));
-    renderDivision('B Grade', bGradeShooters, false);
-    renderDivision('Handicap', handicapShooters, true);
-    renderDivision('Unranked', unrankedShooters, false);
+    // Render each division, B Grade sorted by handicap total
+    divisions.forEach(div => {
+      const divShooters = shooters.filter(s => s.division === div);
+      const sortByHandicap = div === 'B Grade';
+      renderDivision(div, divShooters, sortByHandicap);
+    });
+
+    // Catch anyone not assigned to a known division
+    const unranked = shooters.filter(s => !divisions.includes(s.division));
+    renderDivision('Unranked', unranked, false);
   }
 
   // ── Export CSV ────────────────────────────────────────────────────────────
