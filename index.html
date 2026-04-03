@@ -599,6 +599,14 @@ window.addEventListener('load', () => {
   function showResults() {
     resultsContainer.innerHTML = '';
 
+    const divisionThemes = {
+      'Open':      { header: '#b8860b', headerText: '#fff' },
+      'A Grade':   { header: '#a00000', headerText: '#fff' },
+      'B Grade':   { header: '#003580', headerText: '#fff' },
+      'Handicap':  { header: '#222222', headerText: '#fff' },
+      'Unranked':  { header: '#ffffff', headerText: '#000', border: '2px solid #000' },
+    };
+
     function renderDivision(divName, list, sortByHandicap = false) {
       if (list.length === 0) return;
       const processed = list.map(s => {
@@ -609,19 +617,24 @@ window.addEventListener('load', () => {
       });
       processed.sort((a, b) => sortByHandicap ? b.hcapTotal - a.hcapTotal : b.total - a.total);
 
+      const theme = divisionThemes[divName] || { header: '#007bff', headerText: '#fff' };
+
       const h = document.createElement('h3');
       h.textContent = `Division: ${divName}`;
+      h.style.cssText = `background:${theme.header}; color:${theme.headerText}; padding:0.6rem 1rem; border-radius:8px 8px 0 0; margin-bottom:0; ${theme.border ? 'border:' + theme.border : ''}`;
       resultsContainer.appendChild(h);
 
-      processed.forEach(shooter => {
+      processed.forEach((shooter, idx) => {
+        const isWinner = idx === 0;
         const ends  = chunkArray(shooter.scores, shotsPerEnd);
         const table = document.createElement('table');
+        table.style.cssText = `margin-bottom:0; border-radius:0; ${isWinner ? 'background:#fffbe6;' : ''}`;
         const xDisp = shooter.xCount > 0 ? ` | X's: ${shooter.xCount}` : '';
         const scoreDisplay = sortByHandicap
           ? `Total: ${shooter.total} | <span class="highlight-score">Hcap Total: ${shooter.hcapTotal}</span> | Avg: ${shooter.avg}${xDisp}`
           : `<span class="highlight-score">Total: ${shooter.total}</span> | Hcap Total: ${shooter.hcapTotal} | Avg: ${shooter.avg}${xDisp}`;
         const thead = document.createElement('thead');
-        thead.innerHTML = `<tr><th colspan="${shotsPerEnd + 2}"><span class="shooter-header-name">${shooter.name}</span>${shooter.handicap ? ' – Hcp:' + shooter.handicap : ''} | ${scoreDisplay}</th></tr>`;
+        thead.innerHTML = `<tr><th colspan="${shotsPerEnd + 2}" style="background:${theme.header}cc; color:${theme.headerText};"><span class="shooter-header-name" style="${isWinner ? 'text-decoration:underline;' : ''}">${isWinner ? '🏆 ' : ''}${shooter.name}</span>${shooter.handicap ? ' – Hcp:' + shooter.handicap : ''} | ${scoreDisplay}</th></tr>`;
         table.appendChild(thead);
 
         const tbody = document.createElement('tbody');
@@ -644,7 +657,23 @@ window.addEventListener('load', () => {
         table.appendChild(tbody);
         resultsContainer.appendChild(table);
       });
+
+      const spacer = document.createElement('div');
+      spacer.style.marginBottom = '1.5rem';
+      resultsContainer.appendChild(spacer);
     }
+
+    divisions.forEach(div => {
+      const divShooters = shooters.filter(s => s.division === div);
+      renderDivision(div, divShooters, div === 'B Grade');
+    });
+
+    const handicapShooters = shooters.filter(s => s.handicap && s.handicap.trim() !== '');
+    renderDivision('Handicap', handicapShooters, true);
+
+    const unranked = shooters.filter(s => !divisions.includes(s.division));
+    renderDivision('Unranked', unranked, true);
+  }
 
     // Render each division, B Grade sorted by handicap total
     divisions.forEach(div => {
