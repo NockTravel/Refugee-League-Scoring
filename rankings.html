@@ -7,11 +7,10 @@
 <style>
   body { font-family: Arial, sans-serif; margin:0; padding:0.5rem; background:#f7f7f7; }
   h1, h2, h3 { text-align:center; }
-  #main { max-width:650px; margin:0 auto; }
+  #main { max-width:680px; margin:0 auto; }
 
   .hidden { display:none !important; }
 
-  /* Loading overlay — same as index.html */
   .loading-overlay {
     position: fixed; inset: 0;
     background: rgba(247,247,247,0.96);
@@ -37,13 +36,11 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Status bar */
   .status { padding:0.5rem; margin:0.5rem 0; border-radius:5px; text-align:center; font-weight:bold; }
   .status.success { background:#d4edda; color:#155724; }
   .status.error   { background:#f8d7da; color:#721c24; }
   .status.info    { background:#d1ecf1; color:#0c5460; }
 
-  /* Back button */
   .back-btn {
     display:inline-block; margin-bottom:0.8rem;
     background:#6c757d; color:white; border:none;
@@ -52,7 +49,6 @@
   }
   .back-btn:hover { background:#5a6268; }
 
-  /* Filter tabs */
   .filter-tabs {
     display:flex; flex-wrap:wrap; gap:0.4rem;
     justify-content:center; margin-bottom:1rem;
@@ -63,13 +59,11 @@
     background:#e0e0e0; color:#333;
     transition: background 0.15s, color 0.15s;
   }
-  .filter-tab.active          { background:#007bff; color:white; }
-  .filter-tab[data-div="Open"]    { }
+  .filter-tab.active { background:#007bff; color:white; }
   .filter-tab[data-div="Open"].active    { background:#b8860b; color:#fff; }
   .filter-tab[data-div="A Grade"].active { background:#a00000; color:#fff; }
   .filter-tab[data-div="B Grade"].active { background:#003580; color:#fff; }
 
-  /* Refresh button */
   #refreshBtn {
     display:block; width:100%; margin-bottom:1rem;
     background:#17a2b8; color:white; border:none;
@@ -78,31 +72,36 @@
   }
   #refreshBtn:hover { background:#138496; }
 
-  /* Ranking table */
   table { width:100%; border-collapse:collapse; background:white; border-radius:10px; overflow:hidden; margin-bottom:1.5rem; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
-  th, td { padding:0.6rem 0.5rem; border-bottom:1px solid #ddd; text-align:center; }
-  th { background:#007bff; color:white; font-size:0.95rem; }
+  th, td { padding:0.6rem 0.4rem; border-bottom:1px solid #ddd; text-align:center; }
+  th { background:#007bff; color:white; font-size:0.9rem; }
   tr:last-child td { border-bottom:none; }
   tr:nth-child(even) td { background:#f0f6ff; }
 
-  .rank-cell { font-weight:bold; font-size:1.1rem; width:42px; }
+  .rank-cell { font-weight:bold; font-size:1.1rem; width:38px; }
   .rank-1 { color:#b8860b; font-size:1.3rem; }
   .rank-2 { color:#888; font-size:1.2rem; }
   .rank-3 { color:#a0522d; font-size:1.15rem; }
+
+  /* Rank change cell */
+  .change-cell { width:48px; font-size:0.85rem; font-weight:bold; white-space:nowrap; }
+  .change-up   { color:#155724; }
+  .change-down { color:#721c24; }
+  .change-none { color:#888; font-size:1rem; }
+  .change-new  { color:#0c5460; font-size:0.75rem; font-weight:bold; }
 
   .name-cell { text-align:left; font-weight:bold; }
   .division-badge {
     display:inline-block; padding:0.15rem 0.5rem;
     border-radius:10px; font-size:0.78rem; font-weight:bold; color:white;
   }
-  .div-Open    { background:#b8860b; }
-  .div-A       { background:#a00000; }
-  .div-B       { background:#003580; }
-  .div-other   { background:#555; }
+  .div-Open  { background:#b8860b; }
+  .div-A     { background:#a00000; }
+  .div-B     { background:#003580; }
+  .div-other { background:#555; }
 
   .score-good { color:#155724; font-weight:bold; }
 
-  /* Division section header */
   .div-header {
     color:white; padding:0.6rem 1rem;
     border-radius:8px 8px 0 0; margin-bottom:0;
@@ -113,8 +112,14 @@
   .div-header.B-Grade { background:#003580; }
   .div-header.All     { background:#007bff; }
 
-  /* Last updated */
   #lastUpdated { text-align:center; color:#888; font-size:0.85rem; margin-bottom:0.5rem; }
+
+  /* Legend */
+  .legend {
+    display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;
+    font-size:0.82rem; color:#555; margin-bottom:0.8rem;
+  }
+  .legend span { display:flex; align-items:center; gap:0.3rem; }
 </style>
 </head>
 <body>
@@ -144,12 +149,19 @@
     <button class="filter-tab" data-div="B Grade">B Grade</button>
   </div>
 
+  <div class="legend">
+    <span><span style="color:#155724; font-weight:bold;">▲ 3</span> Moved up</span>
+    <span><span style="color:#721c24; font-weight:bold;">▼ 2</span> Moved down</span>
+    <span><span style="color:#888;">—</span> No change</span>
+    <span><span style="color:#0c5460; font-weight:bold;">NEW</span> First week</span>
+  </div>
+
   <div id="rankingsContainer"></div>
 </div>
 
 <script>
 const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyfjyVhe_cRDdKk5afHNC67hn7UjI5bqu9dsn1zyHoaCj7fpAyBzqhJIi5zt-GQSr-W/exec';
-  
+
 let allArchers = [];
 let currentFilter = 'All';
 
@@ -173,7 +185,6 @@ function getDivisionClass(division) {
 }
 
 function assignRanks(archers) {
-  // Sort by handicap ascending, assign rank (ties get same rank)
   const sorted = [...archers].sort((a, b) => {
     const ha = parseFloat(a.handicap) || 9999;
     const hb = parseFloat(b.handicap) || 9999;
@@ -189,6 +200,24 @@ function assignRanks(archers) {
     archer.rank = rank;
   });
   return sorted;
+}
+
+function renderChangeCell(rankChange) {
+  const td = document.createElement('td');
+  td.className = 'change-cell';
+
+  if (rankChange === null || rankChange === undefined) {
+    // New archer — no history yet
+    td.innerHTML = `<span class="change-new">NEW</span>`;
+  } else if (rankChange > 0) {
+    td.innerHTML = `<span class="change-up">▲ ${rankChange}</span>`;
+  } else if (rankChange < 0) {
+    td.innerHTML = `<span class="change-down">▼ ${Math.abs(rankChange)}</span>`;
+  } else {
+    td.innerHTML = `<span class="change-none">—</span>`;
+  }
+
+  return td;
 }
 
 function renderRankings(filter) {
@@ -213,7 +242,6 @@ function renderRankings(filter) {
 }
 
 function renderTable(container, archers, divisionLabel, showDivisionBadge) {
-  // Division header
   const headerDiv = document.createElement('div');
   const divClass = divisionLabel.replace(' ', '-');
   headerDiv.className = `div-header ${divClass}`;
@@ -223,12 +251,12 @@ function renderTable(container, archers, divisionLabel, showDivisionBadge) {
   const table = document.createElement('table');
   table.style.borderRadius = '0 0 10px 10px';
 
-  // Header row
+  // Header
   const thead = document.createElement('thead');
   const headerRow = document.createElement('tr');
   const cols = showDivisionBadge
-    ? ['Rank', 'Name', 'Division', 'Handicap', 'Last Score', 'Best Score']
-    : ['Rank', 'Name', 'Handicap', 'Last Score', 'Best Score'];
+    ? ['Rank', '±', 'Name', 'Division', 'Handicap', 'Last', 'Best']
+    : ['Rank', '±', 'Name', 'Handicap', 'Last', 'Best'];
   cols.forEach(col => {
     const th = document.createElement('th');
     th.textContent = col;
@@ -237,7 +265,7 @@ function renderTable(container, archers, divisionLabel, showDivisionBadge) {
   thead.appendChild(headerRow);
   table.appendChild(thead);
 
-  // Body rows
+  // Body
   const tbody = document.createElement('tbody');
   archers.forEach(archer => {
     const tr = document.createElement('tr');
@@ -245,11 +273,14 @@ function renderTable(container, archers, divisionLabel, showDivisionBadge) {
     // Rank
     const rankTd = document.createElement('td');
     rankTd.className = 'rank-cell';
-    if (archer.rank === 1) rankTd.innerHTML = `<span class="rank-1">🥇</span>`;
+    if (archer.rank === 1)      rankTd.innerHTML = `<span class="rank-1">🥇</span>`;
     else if (archer.rank === 2) rankTd.innerHTML = `<span class="rank-2">🥈 2</span>`;
     else if (archer.rank === 3) rankTd.innerHTML = `<span class="rank-3">🥉 3</span>`;
     else rankTd.textContent = archer.rank;
     tr.appendChild(rankTd);
+
+    // Rank change
+    tr.appendChild(renderChangeCell(archer.rankChange));
 
     // Name
     const nameTd = document.createElement('td');
@@ -257,7 +288,7 @@ function renderTable(container, archers, divisionLabel, showDivisionBadge) {
     nameTd.textContent = `${archer.firstName} ${archer.lastName}`.trim();
     tr.appendChild(nameTd);
 
-    // Division badge (only in All view)
+    // Division badge (All view only)
     if (showDivisionBadge) {
       const divTd = document.createElement('td');
       const badge = document.createElement('span');
@@ -302,8 +333,6 @@ async function loadRankings() {
     if (!data.success) throw new Error(data.error || 'Failed to load rankings');
 
     allArchers = data.rankings || [];
-
-    // Normalise field names — getRankings returns rank/division, getArchers returns grade
     allArchers.forEach(a => {
       if (!a.division && a.grade) a.division = a.grade;
     });
@@ -316,7 +345,7 @@ async function loadRankings() {
   } catch (error) {
     console.error('Load error:', error);
 
-    // Fallback: try getArchers and compute ranking client-side
+    // Fallback
     try {
       document.getElementById('loadingMsg').textContent = 'Trying fallback…';
       const response = await fetch(`${appsScriptUrl}?action=getArchers`);
@@ -327,7 +356,8 @@ async function loadRankings() {
         ...a,
         division: a.grade,
         lastScore: '',
-        bestScore: ''
+        bestScore: '',
+        rankChange: null
       }));
 
       document.getElementById('lastUpdated').textContent =
@@ -343,7 +373,6 @@ async function loadRankings() {
   }
 }
 
-// Filter tabs
 document.getElementById('filterTabs').addEventListener('click', e => {
   const tab = e.target.closest('.filter-tab');
   if (!tab) return;
@@ -353,10 +382,8 @@ document.getElementById('filterTabs').addEventListener('click', e => {
   renderRankings(currentFilter);
 });
 
-// Refresh button
 document.getElementById('refreshBtn').addEventListener('click', loadRankings);
 
-// Initial load
 loadRankings();
 </script>
 </body>
