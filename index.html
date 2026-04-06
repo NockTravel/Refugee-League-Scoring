@@ -77,9 +77,45 @@
   @keyframes spin {
     to { transform: rotate(360deg); }
   }
+  .startup-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(247, 247, 247, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  .startup-loading-content {
+    text-align: center;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  .startup-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0,0,0,.1);
+    border-radius: 50%;
+    border-top-color: #007bff;
+    animation: spin 1s ease-in-out infinite;
+    margin: 0 auto 1rem;
+  }
 </style>
 </head>
 <body>
+<div id="startupLoading" class="startup-loading">
+  <div class="startup-loading-content">
+    <div class="startup-spinner"></div>
+    <h2>Loading Archery App</h2>
+    <p id="startupMessage">Connecting to database...</p>
+  </div>
+</div>
+
 <h1>Archery Session Scoring</h1>
 
 <!-- Setup Screen -->
@@ -231,6 +267,9 @@ window.addEventListener('load', () => {
   }
 
   async function loadArchersFromSheet() {
+    const startupMsg = document.getElementById('startupMessage');
+    if (startupMsg) startupMsg.textContent = 'Loading archer database...';
+    
     try {
       const url = `${appsScriptUrl}?action=getArchers`;
       const response = await fetch(url);
@@ -242,11 +281,21 @@ window.addEventListener('load', () => {
       
       archersData = data.archers || [];
       console.log('Loaded archers:', archersData);
-      showStatus('setupStatus', `✓ Loaded ${archersData.length} archers from sheet`, 'success');
-      setTimeout(() => document.getElementById('setupStatus').innerHTML = '', 3000);
+      
+      if (startupMsg) {
+        startupMsg.textContent = `Loaded ${archersData.length} archers successfully!`;
+      } else {
+        showStatus('setupStatus', `✓ Loaded ${archersData.length} archers from sheet`, 'success');
+        setTimeout(() => document.getElementById('setupStatus').innerHTML = '', 3000);
+      }
     } catch (error) {
       console.error('Load error:', error);
-      showStatus('setupStatus', 'Error loading archers: ' + error.message, 'error');
+      
+      if (startupMsg) {
+        startupMsg.textContent = 'Error loading archers. Using offline mode.';
+      } else {
+        showStatus('setupStatus', 'Error loading archers: ' + error.message, 'error');
+      }
     }
   }
 
