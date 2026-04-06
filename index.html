@@ -309,7 +309,7 @@ window.addEventListener('load', () => {
         startupLoading.style.transition = 'opacity 0.3s';
         setTimeout(() => startupLoading.remove(), 300);
       }
-    }, 1500);
+    }, 1000);
   }
 
   shooterNameInput.addEventListener('input', function() {
@@ -341,21 +341,34 @@ window.addEventListener('load', () => {
       itemDiv.addEventListener('click', function() {
         shooterNameInput.value = fullName;
         
+        // Use 11-M handicap if that round is selected, otherwise use regular handicap
         const selectedZone = scoreZoneSelect.value;
         const handicapToUse = selectedZone === '11-M' ? (archer.handicap11M || archer.handicap) : archer.handicap;
         shooterHandicapInput.value = handicapToUse;
         
-        if (!divisions.includes(archer.grade) && archer.grade !== 'Overall') {
+        console.log('Selected archer:', archer.firstName, archer.lastName, 'Grade:', archer.grade);
+        console.log('Current divisions:', divisions);
+        
+        // Add the archer's grade to divisions list if not already there and not "Overall"
+        if (archer.grade && archer.grade !== 'Overall' && !divisions.includes(archer.grade)) {
+          console.log('Adding division:', archer.grade);
           divisions.push(archer.grade);
           renderDivisionList();
           renderShooterDivisionOptions();
         }
         
+        // Select the archer's grade in the dropdown
+        let foundMatch = false;
         for (let i = 0; i < shooterDivisionSelect.options.length; i++) {
           if (shooterDivisionSelect.options[i].value === archer.grade) {
             shooterDivisionSelect.selectedIndex = i;
+            foundMatch = true;
+            console.log('Set division dropdown to:', archer.grade);
             break;
           }
+        }
+        if (!foundMatch) {
+          console.log('Could not find division in dropdown:', archer.grade);
         }
         
         closeAllLists();
