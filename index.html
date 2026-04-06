@@ -284,6 +284,7 @@ window.addEventListener('load', () => {
       
       if (startupMsg) {
         startupMsg.textContent = `Loaded ${archersData.length} archers successfully!`;
+        hideStartupLoading();
       } else {
         showStatus('setupStatus', `✓ Loaded ${archersData.length} archers from sheet`, 'success');
         setTimeout(() => document.getElementById('setupStatus').innerHTML = '', 3000);
@@ -292,10 +293,20 @@ window.addEventListener('load', () => {
       console.error('Load error:', error);
       
       if (startupMsg) {
-        startupMsg.textContent = 'Error loading archers. Using offline mode.';
+        startupMsg.textContent = 'Error loading archers. You can still manually enter names.';
+        hideStartupLoading();
       } else {
         showStatus('setupStatus', 'Error loading archers: ' + error.message, 'error');
       }
+    }
+  }
+
+  function hideStartupLoading() {
+    const startupLoading = document.getElementById('startupLoading');
+    if (startupLoading) {
+      startupLoading.style.opacity = '0';
+      startupLoading.style.transition = 'opacity 0.3s';
+      setTimeout(() => startupLoading.remove(), 300);
     }
   }
 
