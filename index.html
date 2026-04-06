@@ -302,12 +302,14 @@ window.addEventListener('load', () => {
   }
 
   function hideStartupLoading() {
-    const startupLoading = document.getElementById('startupLoading');
-    if (startupLoading) {
-      startupLoading.style.opacity = '0';
-      startupLoading.style.transition = 'opacity 0.3s';
-      setTimeout(() => startupLoading.remove(), 300);
-    }
+    setTimeout(() => {
+      const startupLoading = document.getElementById('startupLoading');
+      if (startupLoading) {
+        startupLoading.style.opacity = '0';
+        startupLoading.style.transition = 'opacity 0.3s';
+        setTimeout(() => startupLoading.remove(), 300);
+      }
+    }, 1500);
   }
 
   shooterNameInput.addEventListener('input', function() {
