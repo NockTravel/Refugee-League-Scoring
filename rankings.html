@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCAC Indoor League Rankings</title>
+<style>
+  body { font-family: Arial, sans-serif; margin:0; padding:0.5rem; background:#f7f7f7; }
+  h1, h2, h3 { text-align:center; }
+  #main { max-width:650px; margin:0 auto; }
+
+  .hidden { display:none !important; }
+
+  /* Loading overlay — same as index.html */
+  .loading-overlay {
+    position: fixed; inset: 0;
+    background: rgba(247,247,247,0.96);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+  }
+  .loading-overlay.fade-out { opacity: 0; pointer-events: none; }
+  .loading-box {
+    text-align: center; padding: 2rem 2.5rem;
+    background: white; border-radius: 14px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    min-width: 260px;
+  }
+  .loading-box h2 { margin: 0 0 0.5rem; font-size: 1.3rem; color: #333; }
+  .loading-box p  { margin: 0; color: #555; font-size: 0.95rem; }
+  .spinner {
+    width: 48px; height: 48px; margin: 0 auto 1rem;
+    border: 5px solid #e0e0e0;
+    border-top-color: #007bff;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Status bar */
+  .status { padding:0.5rem; margin:0.5rem 0; border-radius:5px; text-align:center; font-weight:bold; }
+  .status.success { background:#d4edda; color:#155724; }
+  .status.error   { background:#f8d7da; color:#721c24; }
+  .status.info    { background:#d1ecf1; color:#0c5460; }
+
+  /* Back button */
+  .back-btn {
+    display:inline-block; margin-bottom:0.8rem;
+    background:#6c757d; color:white; border:none;
+    border-radius:8px; padding:0.6rem 1.2rem;
+    font-size:1rem; cursor:pointer; text-decoration:none;
+  }
+  .back-btn:hover { background:#5a6268; }
+
+  /* Filter tabs */
+  .filter-tabs {
+    display:flex; flex-wrap:wrap; gap:0.4rem;
+    justify-content:center; margin-bottom:1rem;
+  }
+  .filter-tab {
+    border:none; border-radius:20px; padding:0.5rem 1.1rem;
+    font-size:0.95rem; cursor:pointer; font-weight:bold;
+    background:#e0e0e0; color:#333;
+    transition: background 0.15s, color 0.15s;
+  }
+  .filter-tab.active          { background:#007bff; color:white; }
+  .filter-tab[data-div="Open"]    { }
+  .filter-tab[data-div="Open"].active    { background:#b8860b; color:#fff; }
+  .filter-tab[data-div="A Grade"].active { background:#a00000; color:#fff; }
+  .filter-tab[data-div="B Grade"].active { background:#003580; color:#fff; }
+
+  /* Refresh button */
+  #refreshBtn {
+    display:block; width:100%; margin-bottom:1rem;
+    background:#17a2b8; color:white; border:none;
+    border-radius:8px; padding:0.8rem; font-size:1.1rem; cursor:pointer;
+    min-height:50px;
+  }
+  #refreshBtn:hover { background:#138496; }
+
+  /* Ranking table */
+  table { width:100%; border-collapse:collapse; background:white; border-radius:10px; overflow:hidden; margin-bottom:1.5rem; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+  th, td { padding:0.6rem 0.5rem; border-bottom:1px solid #ddd; text-align:center; }
+  th { background:#007bff; color:white; font-size:0.95rem; }
+  tr:last-child td { border-bottom:none; }
+  tr:nth-child(even) td { background:#f0f6ff; }
+
+  .rank-cell { font-weight:bold; font-size:1.1rem; width:42px; }
+  .rank-1 { color:#b8860b; font-size:1.3rem; }
+  .rank-2 { color:#888; font-size:1.2rem; }
+  .rank-3 { color:#a0522d; font-size:1.15rem; }
+
+  .name-cell { text-align:left; font-weight:bold; }
+  .division-badge {
+    display:inline-block; padding:0.15rem 0.5rem;
+    border-radius:10px; font-size:0.78rem; font-weight:bold; color:white;
+  }
+  .div-Open    { background:#b8860b; }
+  .div-A       { background:#a00000; }
+  .div-B       { background:#003580; }
+  .div-other   { background:#555; }
+
+  .score-good { color:#155724; font-weight:bold; }
+
+  /* Division section header */
+  .div-header {
+    color:white; padding:0.6rem 1rem;
+    border-radius:8px 8px 0 0; margin-bottom:0;
+    font-size:1.1rem; font-weight:bold; text-align:center;
+  }
+  .div-header.Open    { background:#b8860b; }
+  .div-header.A-Grade { background:#a00000; }
+  .div-header.B-Grade { background:#003580; }
+  .div-header.All     { background:#007bff; }
+
+  /* Last updated */
+  #lastUpdated { text-align:center; color:#888; font-size:0.85rem; margin-bottom:0.5rem; }
+</style>
+</head>
+<body>
+
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <h2>Loading Rankings</h2>
+    <p id="loadingMsg">Fetching archer data…</p>
+  </div>
+</div>
+
+<div id="main">
+  <a href="index.html" class="back-btn">← Back to Scoring App</a>
+  <h1>🏹 Indoor League Rankings</h1>
+  <p style="text-align:center; color:#555; margin-top:-0.5rem;">Ranked by handicap — lowest handicap = Rank 1</p>
+
+  <div id="statusMsg"></div>
+  <div id="lastUpdated"></div>
+
+  <button id="refreshBtn">🔄 Refresh Rankings</button>
+
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab active" data-div="All">All</button>
+    <button class="filter-tab" data-div="Open">Open</button>
+    <button class="filter-tab" data-div="A Grade">A Grade</button>
+    <button class="filter-tab" data-div="B Grade">B Grade</button>
+  </div>
+
+  <div id="rankingsContainer"></div>
+</div>
+
+<script>
+const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyfjyVhe_cRDdKk5afHNC67hn7UjI5bqu9dsn1zyHoaCj7fpAyBzqhJIi5zt-GQSr-W/exec';
+
+let allArchers = [];
+let currentFilter = 'All';
+
+function showStatus(msg, type) {
+  document.getElementById('statusMsg').innerHTML = `<div class="status ${type}">${msg}</div>`;
+  if (type === 'success') setTimeout(() => document.getElementById('statusMsg').innerHTML = '', 3000);
+}
+
+function hideOverlay() {
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.classList.add('fade-out');
+  setTimeout(() => overlay.classList.add('hidden'), 320);
+}
+
+function getDivisionClass(division) {
+  if (!division) return 'div-other';
+  if (division === 'Open') return 'div-Open';
+  if (division === 'A Grade') return 'div-A';
+  if (division === 'B Grade') return 'div-B';
+  return 'div-other';
+}
+
+function assignRanks(archers) {
+  // Sort by handicap ascending, assign rank (ties get same rank)
+  const sorted = [...archers].sort((a, b) => {
+    const ha = parseFloat(a.handicap) || 9999;
+    const hb = parseFloat(b.handicap) || 9999;
+    return ha - hb;
+  });
+  let rank = 1;
+  sorted.forEach((archer, i) => {
+    if (i > 0) {
+      const prev = parseFloat(sorted[i-1].handicap) || 9999;
+      const curr = parseFloat(archer.handicap) || 9999;
+      if (curr !== prev) rank = i + 1;
+    }
+    archer.rank = rank;
+  });
+  return sorted;
+}
+
+function renderRankings(filter) {
+  const container = document.getElementById('rankingsContainer');
+  container.innerHTML = '';
+
+  if (allArchers.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:#888;">No archer data available.</p>';
+    return;
+  }
+
+  if (filter === 'All') {
+    renderTable(container, assignRanks(allArchers), 'All', true);
+  } else {
+    const filtered = allArchers.filter(a => a.division === filter || a.grade === filter);
+    if (filtered.length === 0) {
+      container.innerHTML = `<p style="text-align:center; color:#888;">No archers in ${filter}.</p>`;
+      return;
+    }
+    renderTable(container, assignRanks(filtered), filter, false);
+  }
+}
+
+function renderTable(container, archers, divisionLabel, showDivisionBadge) {
+  // Division header
+  const headerDiv = document.createElement('div');
+  const divClass = divisionLabel.replace(' ', '-');
+  headerDiv.className = `div-header ${divClass}`;
+  headerDiv.textContent = divisionLabel === 'All' ? '🏆 Overall Rankings' : `Division: ${divisionLabel}`;
+  container.appendChild(headerDiv);
+
+  const table = document.createElement('table');
+  table.style.borderRadius = '0 0 10px 10px';
+
+  // Header row
+  const thead = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+  const cols = showDivisionBadge
+    ? ['Rank', 'Name', 'Division', 'Handicap', 'Last Score', 'Best Score']
+    : ['Rank', 'Name', 'Handicap', 'Last Score', 'Best Score'];
+  cols.forEach(col => {
+    const th = document.createElement('th');
+    th.textContent = col;
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  // Body rows
+  const tbody = document.createElement('tbody');
+  archers.forEach(archer => {
+    const tr = document.createElement('tr');
+
+    // Rank
+    const rankTd = document.createElement('td');
+    rankTd.className = 'rank-cell';
+    if (archer.rank === 1) rankTd.innerHTML = `<span class="rank-1">🥇</span>`;
+    else if (archer.rank === 2) rankTd.innerHTML = `<span class="rank-2">🥈 2</span>`;
+    else if (archer.rank === 3) rankTd.innerHTML = `<span class="rank-3">🥉 3</span>`;
+    else rankTd.textContent = archer.rank;
+    tr.appendChild(rankTd);
+
+    // Name
+    const nameTd = document.createElement('td');
+    nameTd.className = 'name-cell';
+    nameTd.textContent = `${archer.firstName} ${archer.lastName}`.trim();
+    tr.appendChild(nameTd);
+
+    // Division badge (only in All view)
+    if (showDivisionBadge) {
+      const divTd = document.createElement('td');
+      const badge = document.createElement('span');
+      badge.className = `division-badge ${getDivisionClass(archer.division || archer.grade)}`;
+      badge.textContent = archer.division || archer.grade || '—';
+      divTd.appendChild(badge);
+      tr.appendChild(divTd);
+    }
+
+    // Handicap
+    const hcTd = document.createElement('td');
+    hcTd.textContent = archer.handicap !== '' && archer.handicap != null ? parseFloat(archer.handicap).toFixed(2) : '—';
+    tr.appendChild(hcTd);
+
+    // Last Score
+    const lastTd = document.createElement('td');
+    lastTd.textContent = archer.lastScore || '—';
+    if (archer.lastScore) lastTd.className = 'score-good';
+    tr.appendChild(lastTd);
+
+    // Best Score
+    const bestTd = document.createElement('td');
+    bestTd.textContent = archer.bestScore || '—';
+    if (archer.bestScore) bestTd.className = 'score-good';
+    tr.appendChild(bestTd);
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  container.appendChild(table);
+}
+
+async function loadRankings() {
+  document.getElementById('loadingMsg').textContent = 'Fetching rankings…';
+  document.getElementById('loadingOverlay').classList.remove('hidden', 'fade-out');
+
+  try {
+    const response = await fetch(`${appsScriptUrl}?action=getRankings`);
+    const data = await response.json();
+
+    if (!data.success) throw new Error(data.error || 'Failed to load rankings');
+
+    allArchers = data.rankings || [];
+
+    // Normalise field names — getRankings returns rank/division, getArchers returns grade
+    allArchers.forEach(a => {
+      if (!a.division && a.grade) a.division = a.grade;
+    });
+
+    document.getElementById('lastUpdated').textContent =
+      `Last updated: ${new Date().toLocaleTimeString()}`;
+
+    renderRankings(currentFilter);
+    showStatus(`✓ Loaded ${allArchers.length} archers`, 'success');
+  } catch (error) {
+    console.error('Load error:', error);
+
+    // Fallback: try getArchers and compute ranking client-side
+    try {
+      document.getElementById('loadingMsg').textContent = 'Trying fallback…';
+      const response = await fetch(`${appsScriptUrl}?action=getArchers`);
+      const data = await response.json();
+      if (!data.success) throw new Error(data.error);
+
+      allArchers = (data.archers || []).map(a => ({
+        ...a,
+        division: a.grade,
+        lastScore: '',
+        bestScore: ''
+      }));
+
+      document.getElementById('lastUpdated').textContent =
+        `Last updated: ${new Date().toLocaleTimeString()} (basic data only)`;
+
+      renderRankings(currentFilter);
+      showStatus('⚠ Loaded basic archer data — add getRankings to your App Script for scores', 'info');
+    } catch (fallbackError) {
+      showStatus('⚠ Could not load rankings. Check your App Script URL.', 'error');
+    }
+  } finally {
+    hideOverlay();
+  }
+}
+
+// Filter tabs
+document.getElementById('filterTabs').addEventListener('click', e => {
+  const tab = e.target.closest('.filter-tab');
+  if (!tab) return;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  currentFilter = tab.dataset.div;
+  renderRankings(currentFilter);
+});
+
+// Refresh button
+document.getElementById('refreshBtn').addEventListener('click', loadRankings);
+
+// Initial load
+loadRankings();
+</script>
+</body>
+</html>
