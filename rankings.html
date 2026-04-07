@@ -83,7 +83,6 @@
   .rank-2 { color:#888; font-size:1.2rem; }
   .rank-3 { color:#a0522d; font-size:1.15rem; }
 
-  /* Rank change cell */
   .change-cell { width:48px; font-size:0.85rem; font-weight:bold; white-space:nowrap; }
   .change-up   { color:#155724; }
   .change-down { color:#721c24; }
@@ -114,12 +113,17 @@
 
   #lastUpdated { text-align:center; color:#888; font-size:0.85rem; margin-bottom:0.5rem; }
 
-  /* Legend */
   .legend {
     display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;
     font-size:0.82rem; color:#555; margin-bottom:0.8rem;
   }
   .legend span { display:flex; align-items:center; gap:0.3rem; }
+
+  /* Inactive notice */
+  .inactive-note {
+    text-align:center; color:#888; font-size:0.82rem;
+    margin-top:-0.8rem; margin-bottom:1rem;
+  }
 </style>
 </head>
 <body>
@@ -136,6 +140,7 @@
   <a href="index.html" class="back-btn">← Back to Scoring App</a>
   <h1>🏹 Indoor League Rankings</h1>
   <p style="text-align:center; color:#555; margin-top:-0.5rem;">Ranked by handicap — lowest handicap = Rank 1</p>
+  <p class="inactive-note">Only archers who have shot in the past 2 months are shown.</p>
 
   <div id="statusMsg"></div>
   <div id="lastUpdated"></div>
@@ -184,6 +189,17 @@ function getDivisionClass(division) {
   return 'div-other';
 }
 
+// Filter to archers active within the past 2 months
+function filterActiveArchers(archers) {
+  const twoMonthsAgo = new Date();
+  twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
+  return archers.filter(a => {
+    if (!a.lastScoreDate || a.lastScoreDate === '') return false;
+    const lastDate = new Date(a.lastScoreDate);
+    return !isNaN(lastDate) && lastDate >= twoMonthsAgo;
+  });
+}
+
 function assignRanks(archers) {
   const sorted = [...archers].sort((a, b) => {
     const ha = parseFloat(a.handicap) || 9999;
@@ -205,9 +221,7 @@ function assignRanks(archers) {
 function renderChangeCell(rankChange) {
   const td = document.createElement('td');
   td.className = 'change-cell';
-
   if (rankChange === null || rankChange === undefined) {
-    // New archer — no history yet
     td.innerHTML = `<span class="change-new">NEW</span>`;
   } else if (rankChange > 0) {
     td.innerHTML = `<span class="change-up">▲ ${rankChange}</span>`;
@@ -216,7 +230,6 @@ function renderChangeCell(rankChange) {
   } else {
     td.innerHTML = `<span class="change-none">—</span>`;
   }
-
   return td;
 }
 
@@ -224,17 +237,20 @@ function renderRankings(filter) {
   const container = document.getElementById('rankingsContainer');
   container.innerHTML = '';
 
-  if (allArchers.length === 0) {
-    container.innerHTML = '<p style="text-align:center; color:#888;">No archer data available.</p>';
+  // Apply 2-month activity filter first
+  const activeArchers = filterActiveArchers(allArchers);
+
+  if (activeArchers.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:#888;">No active archers found.</p>';
     return;
   }
 
   if (filter === 'All') {
-    renderTable(container, assignRanks(allArchers), 'All', true);
+    renderTable(container, assignRanks(activeArchers), 'All', true);
   } else {
-    const filtered = allArchers.filter(a => a.division === filter || a.grade === filter);
+    const filtered = activeArchers.filter(a => a.division === filter || a.grade === filter);
     if (filtered.length === 0) {
-      container.innerHTML = `<p style="text-align:center; color:#888;">No archers in ${filter}.</p>`;
+      container.innerHTML = `<p style="text-align:center; color:#888;">No active archers in ${filter}.</p>`;
       return;
     }
     renderTable(container, assignRanks(filtered), filter, false);
@@ -251,7 +267,6 @@ function renderTable(container, archers, divisionLabel, showDivisionBadge) {
   const table = document.createElement('table');
   table.style.borderRadius = '0 0 10px 10px';
 
-  // Header
   const thead = document.createElement('thead');
   const headerRow = document.createElement('tr');
   const cols = showDivisionBadge
@@ -265,7 +280,6 @@ function renderTable(container, archers, divisionLabel, showDivisionBadge) {
   thead.appendChild(headerRow);
   table.appendChild(thead);
 
-  // Body
   const tbody = document.createElement('tbody');
   archers.forEach(archer => {
     const tr = document.createElement('tr');
@@ -337,34 +351,42 @@ async function loadRankings() {
       if (!a.division && a.grade) a.division = a.grade;
     });
 
+    const activeCount = filterActiveArchers(allArchers).length;
+
     document.getElementById('lastUpdated').textContent =
       `Last updated: ${new Date().toLocaleTimeString()}`;
 
     renderRankings(currentFilter);
-    showStatus(`✓ Loaded ${allArchers.length} archers`, 'success');
+    showStatus(`✓ Loaded ${activeCount} active archers (of ${allArchers.length} total)`, 'success');
   } catch (error) {
     console.error('Load error:', error);
 
-    // Fallback
+    // Fallback to getArchers
     try {
       document.getElementById('loadingMsg').textContent = 'Trying fallback…';
       const response = await fetch(`${appsScriptUrl}?action=getArchers`);
       const data = await response.json();
       if (!data.success) throw new Error(data.error);
 
+      // Fallback has no lastScoreDate so all archers will be hidden by the filter.
+      // Show a warning and render unfiltered so the page isn't blank.
       allArchers = (data.archers || []).map(a => ({
         ...a,
-        division: a.grade,
-        lastScore: '',
-        bestScore: '',
-        rankChange: null
+        division:      a.grade,
+        lastScore:     '',
+        lastScoreDate: '',
+        bestScore:     '',
+        rankChange:    null
       }));
 
       document.getElementById('lastUpdated').textContent =
         `Last updated: ${new Date().toLocaleTimeString()} (basic data only)`;
 
-      renderRankings(currentFilter);
-      showStatus('⚠ Loaded basic archer data — add getRankings to your App Script for scores', 'info');
+      // Render without activity filter in fallback mode
+      const container = document.getElementById('rankingsContainer');
+      container.innerHTML = '';
+      renderTable(container, assignRanks(allArchers), 'All', true);
+      showStatus('⚠ Loaded basic archer data — activity filter not available in fallback mode', 'info');
     } catch (fallbackError) {
       showStatus('⚠ Could not load rankings. Check your App Script URL.', 'error');
     }
