@@ -87,8 +87,12 @@
     flex-wrap: wrap;
   }
   #pendingBanner span { flex:1; font-size:0.9rem; }
-  #pendingBanner button { background:#ffc107; color:#333; font-size:0.9rem; padding:0.4rem 0.8rem; min-height:auto; }
-  #pendingBanner button:hover { background:#e0a800; }
+  #pendingBanner .banner-buttons { display:flex; gap:0.5rem; flex-wrap:wrap; }
+  #pendingBanner button { font-size:0.9rem; padding:0.4rem 0.8rem; min-height:auto; }
+  #retryUploadBtn  { background:#ffc107; color:#333; }
+  #retryUploadBtn:hover  { background:#e0a800; }
+  #dismissUploadBtn { background:#6c757d; color:#fff; }
+  #dismissUploadBtn:hover { background:#5a6268; }
 </style>
 </head>
 <body>
@@ -160,7 +164,10 @@
   <h2>Session Results</h2>
   <div id="pendingBanner" class="hidden">
     <span id="pendingBannerText">⚠ Scores not yet uploaded.</span>
-    <button id="retryUploadBtn">Retry Upload</button>
+    <div class="banner-buttons">
+      <button id="retryUploadBtn">Retry Upload</button>
+      <button id="dismissUploadBtn">Dismiss &amp; Delete</button>
+    </div>
   </div>
   <div id="resultsStatus"></div>
   <div id="resultsContainer"></div>
@@ -567,6 +574,15 @@ window.addEventListener('load', () => {
     }
   });
 
+  // Dismiss & delete pending upload
+  document.getElementById('dismissUploadBtn').addEventListener('click', () => {
+    if (!confirm('Are you sure you want to delete the pending upload? These scores will NOT be saved to the database.')) return;
+    clearPendingUpload();
+    clearSessionLocal();
+    pendingBanner.classList.add('hidden');
+    showStatus('resultsStatus', 'Pending upload dismissed and deleted.', 'info');
+  });
+
   // Check for leftover pending upload from a previous session
   function checkPendingOnLoad() {
     const pending = getPendingUpload();
@@ -677,12 +693,12 @@ window.addEventListener('load', () => {
     if (confirm('Start a new session? This will clear all current data.')) { clearSessionLocal(); location.reload(); }
   });
 
-  // Init — sync operations first, then async
+  // Init
   renderDivisionList();
   renderShooterDivisionOptions();
   loadSessionFromLocal();
   checkPendingOnLoad();
-  loadArchersFromSheet(); // async — hides overlay itself when done
+  loadArchersFromSheet();
 
   window.addEventListener('beforeunload', e => {
     if (shooters.some(s=>s.scores&&s.scores.length>0) || !scoringDiv.classList.contains('hidden')) {
