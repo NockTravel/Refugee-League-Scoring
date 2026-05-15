@@ -20,10 +20,7 @@
   .score-buttons button:active { background:#004085; transform:scale(0.95); }
   .total { font-size:0.95rem; font-weight:bold; text-align:right; word-wrap:break-word; }
   .arrows { font-size:1rem; margin-bottom:0.5rem; min-height:1.5em; word-wrap:break-word; overflow-wrap:break-word; }
-  input[type="text"], select {
-    padding:0.7rem; font-size:1rem; border:1px solid #ccc; border-radius:5px;
-    width:70%; margin-bottom:0.5rem; box-sizing:border-box; -webkit-appearance:none;
-  }
+  input[type="text"], select { padding:0.7rem; font-size:1rem; border:1px solid #ccc; border-radius:5px; width:70%; margin-bottom:0.5rem; box-sizing:border-box; -webkit-appearance:none; }
   input[type="text"]::placeholder { color:#999; opacity:1; }
   button { border:none; border-radius:8px; padding:0.8rem 1.2rem; font-size:1.1rem; cursor:pointer; color:white; min-height:50px; }
   button.add { background:#28a745; }
@@ -52,124 +49,61 @@
   .status.success { background:#d4edda; color:#155724; }
   .status.error { background:#f8d7da; color:#721c24; }
   .status.info { background:#d1ecf1; color:#0c5460; }
-
-  /* Loading overlay */
-  .loading-overlay {
-    position: fixed; inset: 0;
-    background: rgba(247,247,247,0.96);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 9999;
-    transition: opacity 0.3s ease;
-  }
-  .loading-overlay.fade-out { opacity: 0; pointer-events: none; }
-  .loading-box {
-    text-align: center; padding: 2rem 2.5rem;
-    background: white; border-radius: 14px;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
-    min-width: 260px;
-  }
-  .loading-box h2 { margin: 0 0 0.5rem; font-size: 1.3rem; color: #333; }
-  .loading-box p  { margin: 0; color: #555; font-size: 0.95rem; }
-  .spinner {
-    width: 48px; height: 48px; margin: 0 auto 1rem;
-    border: 5px solid #e0e0e0;
-    border-top-color: #007bff;
-    border-radius: 50%;
-    animation: spin 0.9s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* Pending upload banner */
-  #pendingBanner {
-    background: #fff3cd; color: #856404; border: 1px solid #ffc107;
-    padding: 0.6rem 1rem; border-radius:8px; margin-bottom:0.5rem;
-    display:flex; align-items:center; justify-content:space-between; gap:0.5rem;
-    flex-wrap: wrap;
-  }
+  .loading-overlay { position:fixed; inset:0; background:rgba(247,247,247,0.96); display:flex; align-items:center; justify-content:center; z-index:9999; transition:opacity 0.3s ease; }
+  .loading-overlay.fade-out { opacity:0; pointer-events:none; }
+  .loading-box { text-align:center; padding:2rem 2.5rem; background:white; border-radius:14px; box-shadow:0 6px 24px rgba(0,0,0,0.12); min-width:260px; }
+  .loading-box h2 { margin:0 0 0.5rem; font-size:1.3rem; color:#333; }
+  .loading-box p { margin:0; color:#555; font-size:0.95rem; }
+  .spinner { width:48px; height:48px; margin:0 auto 1rem; border:5px solid #e0e0e0; border-top-color:#007bff; border-radius:50%; animation:spin 0.9s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  #pendingBanner { background:#fff3cd; color:#856404; border:1px solid #ffc107; padding:0.6rem 1rem; border-radius:8px; margin-bottom:0.5rem; display:flex; align-items:center; justify-content:space-between; gap:0.5rem; flex-wrap:wrap; }
   #pendingBanner span { flex:1; font-size:0.9rem; }
   #pendingBanner .banner-buttons { display:flex; gap:0.5rem; flex-wrap:wrap; }
   #pendingBanner button { font-size:0.9rem; padding:0.4rem 0.8rem; min-height:auto; }
-  #retryUploadBtn  { background:#ffc107; color:#333; }
-  #retryUploadBtn:hover  { background:#e0a800; }
+  #retryUploadBtn { background:#ffc107; color:#333; }
+  #retryUploadBtn:hover { background:#e0a800; }
   #dismissUploadBtn { background:#6c757d; color:#fff; }
   #dismissUploadBtn:hover { background:#5a6268; }
-
-  /* Add shooter mid-session */
-  #addShooterMidSession {
-    background: #fd7e14; width:100%; margin-top:0.5rem; font-size:1.1rem;
-  }
+  #addShooterMidSession { background:#fd7e14; width:100%; margin-top:0.5rem; font-size:1.1rem; }
   #addShooterMidSession:hover { background:#e8690a; }
-  #midSessionPanel {
-    background:white; border-radius:10px; padding:1rem;
-    box-shadow:0 2px 8px rgba(0,0,0,0.15); margin-bottom:1rem;
-    border: 2px solid #fd7e14;
-  }
+  #midSessionPanel { background:white; border-radius:10px; padding:1rem; box-shadow:0 2px 8px rgba(0,0,0,0.15); margin-bottom:1rem; border:2px solid #fd7e14; }
   #midSessionPanel h3 { margin:0 0 0.8rem; color:#fd7e14; text-align:left; }
-
-  /* Results tabs */
-  .results-tabs {
-    display:flex; gap:0.5rem; margin-bottom:1rem;
-  }
-  .results-tab {
-    flex:1; padding:0.7rem; font-size:1rem; border:none; border-radius:8px;
-    cursor:pointer; font-weight:bold; background:#e0e0e0; color:#333; min-height:auto;
-  }
+  .results-tabs { display:flex; gap:0.5rem; margin-bottom:1rem; }
+  .results-tab { flex:1; padding:0.7rem; font-size:1rem; border:none; border-radius:8px; cursor:pointer; font-weight:bold; background:#e0e0e0; color:#333; min-height:auto; }
   .results-tab.active { background:#007bff; color:white; }
-
-  /* Shoot-off organiser */
-  .shootoff-section {
-    background:white; border-radius:10px; padding:1.2rem;
-    margin-bottom:1.2rem; box-shadow:0 2px 4px rgba(0,0,0,0.1);
-  }
-  .shootoff-section h3 {
-    margin:0 0 0.8rem; padding:0.6rem 1rem;
-    border-radius:8px; color:white; text-align:center; font-size:1.1rem;
-  }
-  .shootoff-section h3.gold   { background:#b8860b; }
-  .shootoff-section h3.green  { background:#155724; }
-  .shootoff-section h3.blue   { background:#003580; }
-  .shootoff-winner {
-    text-align:center; font-size:1.3rem; font-weight:bold;
-    padding:0.8rem; background:#fff9e6; border-radius:8px;
-    border:2px solid #ffc107; margin-bottom:0.5rem;
-  }
-  .shootoff-note {
-    text-align:center; color:#555; font-size:0.9rem; margin-top:0.4rem;
-  }
-  .shootoff-archer-row {
-    display:flex; justify-content:space-between; align-items:center;
-    padding:0.6rem 0.8rem; border-bottom:1px solid #eee; font-size:1rem;
-  }
+  .shootoff-section { background:white; border-radius:10px; padding:1.2rem; margin-bottom:1.2rem; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+  .shootoff-section h3 { margin:0 0 0.8rem; padding:0.6rem 1rem; border-radius:8px; color:white; text-align:center; font-size:1.1rem; }
+  .shootoff-section h3.gold { background:#b8860b; }
+  .shootoff-section h3.green { background:#155724; }
+  .shootoff-section h3.blue { background:#003580; }
+  .shootoff-winner { text-align:center; font-size:1.3rem; font-weight:bold; padding:0.8rem; background:#fff9e6; border-radius:8px; border:2px solid #ffc107; margin-bottom:0.5rem; }
+  .shootoff-note { text-align:center; color:#555; font-size:0.9rem; margin-top:0.4rem; }
+  .shootoff-archer-row { display:flex; justify-content:space-between; align-items:center; padding:0.6rem 0.8rem; border-bottom:1px solid #eee; font-size:1rem; }
   .shootoff-archer-row:last-child { border-bottom:none; }
   .shootoff-archer-name { font-weight:bold; }
   .shootoff-archer-detail { color:#555; font-size:0.9rem; }
-  .shootoff-division-badge {
-    display:inline-block; padding:0.15rem 0.5rem;
-    border-radius:10px; font-size:0.78rem; font-weight:bold; color:white; margin-left:0.4rem;
-  }
-  .badge-Open    { background:#b8860b; }
-  .badge-A       { background:#a00000; }
-  .badge-B       { background:#003580; }
+  .shootoff-division-badge { display:inline-block; padding:0.15rem 0.5rem; border-radius:10px; font-size:0.78rem; font-weight:bold; color:white; margin-left:0.4rem; }
+  .badge-Open { background:#b8860b; }
+  .badge-A { background:#a00000; }
+  .badge-B { background:#003580; }
   .badge-Unranked { background:#555; }
 </style>
 </head>
 <body>
 
-<!-- Startup loading overlay -->
 <div id="startupOverlay" class="loading-overlay">
   <div class="loading-box">
     <div class="spinner"></div>
     <h2>Loading Archery App</h2>
-    <p id="startupMsg">Connecting to database…</p>
+    <p id="startupMsg">Connecting to database...</p>
   </div>
 </div>
 
-<!-- Upload loading overlay -->
 <div id="uploadOverlay" class="loading-overlay hidden">
   <div class="loading-box">
     <div class="spinner"></div>
     <h2>Saving Scores</h2>
-    <p id="uploadMsg">Uploading to Google Sheets…</p>
+    <p id="uploadMsg">Uploading to Google Sheets...</p>
   </div>
 </div>
 
@@ -198,7 +132,7 @@
     <div class="instructions">Please input score values in order for your round<br>separated by a comma, e.g., 14,12,10,8,X,M</div>
   </div>
   <br>
-  <div class="optional-note">Optional – if left blank, all shooters are grouped as Overall.</div>
+  <div class="optional-note">Optional - if left blank, all shooters are grouped as Overall.</div>
   <input type="text" id="divisionName" placeholder="Enter division name" style="width:60%;" />
   <button class="add" id="addDivision" style="width:35%;">Add Division</button>
   <div id="divisionList"></div>
@@ -214,17 +148,16 @@
 </div>
 
 <div id="scoring" class="hidden">
-  <!-- Add shooter mid-session panel -->
   <button id="addShooterMidSession">+ Add Shooter to Session</button>
   <div id="midSessionPanel" class="hidden">
-    <h3>➕ Add Late Shooter</h3>
+    <h3>Add Late Shooter</h3>
     <div class="autocomplete">
       <input type="text" id="midShooterName" placeholder="Shooter name" style="width:100%;" />
     </div>
     <input type="text" id="midShooterHandicap" placeholder="Handicap (optional)" style="width:48%;" />
     <select id="midShooterDivision" style="width:48%;"></select>
     <div style="margin:0.5rem 0; font-size:0.9rem; color:#555;">
-      Ends already shot: <strong id="endsAlreadyShot">0</strong> — optionally enter missed end scores below (comma-separated per end, one end per line):
+      Ends already shot: <strong id="endsAlreadyShot">0</strong> - optionally enter missed end scores below (comma-separated per end, one end per line):
     </div>
     <textarea id="midShooterBackScores" placeholder="e.g.&#10;10,9,8&#10;X,10,9" style="width:100%; height:80px; font-size:0.95rem; padding:0.5rem; border:1px solid #ccc; border-radius:5px; box-sizing:border-box; resize:vertical;"></textarea>
     <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
@@ -240,23 +173,19 @@
 <div id="results" class="hidden">
   <h2>Session Results</h2>
   <div id="pendingBanner" class="hidden">
-    <span id="pendingBannerText">⚠ Scores not yet uploaded.</span>
+    <span id="pendingBannerText">Scores not yet uploaded.</span>
     <div class="banner-buttons">
       <button id="retryUploadBtn">Retry Upload</button>
       <button id="dismissUploadBtn">Dismiss &amp; Delete</button>
     </div>
   </div>
   <div id="resultsStatus"></div>
-
-  <!-- Results tabs -->
   <div class="results-tabs">
-    <button class="results-tab active" id="tabResults">📊 Results</button>
-    <button class="results-tab" id="tabShootoff">🏹 Shoot-Off</button>
+    <button class="results-tab active" id="tabResults">Results</button>
+    <button class="results-tab" id="tabShootoff">Shoot-Off</button>
   </div>
-
   <div id="resultsContainer"></div>
   <div id="shootoffContainer" class="hidden"></div>
-
   <button id="exportResults">Export Results (CSV)</button>
   <button id="newSession">New Session</button>
 </div>
@@ -273,62 +202,47 @@ let appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyfjyVhe_cRDdKk5afH
 
 const PENDING_KEY = 'archeryPendingUpload';
 function savePendingUpload(scores) {
-  try { localStorage.setItem(PENDING_KEY, JSON.stringify({ scores, savedAt: new Date().toISOString() })); }
-  catch(e) { console.error('Could not save pending:', e); }
+  try { localStorage.setItem(PENDING_KEY, JSON.stringify({ scores, savedAt: new Date().toISOString() })); } catch(e) {}
 }
 function clearPendingUpload() { localStorage.removeItem(PENDING_KEY); }
 function getPendingUpload() {
-  try { const r = localStorage.getItem(PENDING_KEY); return r ? JSON.parse(r) : null; }
-  catch(e) { return null; }
+  try { const r = localStorage.getItem(PENDING_KEY); return r ? JSON.parse(r) : null; } catch(e) { return null; }
 }
 
 window.addEventListener('load', () => {
-  const setupDiv              = document.getElementById('setup');
-  const scoringDiv            = document.getElementById('scoring');
-  const resultsDiv            = document.getElementById('results');
-  const shooterListDiv        = document.getElementById('shooterList');
-  const scorersDiv            = document.getElementById('scorers');
-  const divisionListDiv       = document.getElementById('divisionList');
-  const resultsContainer      = document.getElementById('resultsContainer');
-  const shootoffContainer     = document.getElementById('shootoffContainer');
-  const startBtn              = document.getElementById('startScoring');
-  const scoreZoneSelect       = document.getElementById('scoreZone');
-  const customContainer       = document.getElementById('customScoreContainer');
-  const customInput           = document.getElementById('customScores');
+  const setupDiv = document.getElementById('setup');
+  const scoringDiv = document.getElementById('scoring');
+  const resultsDiv = document.getElementById('results');
+  const shooterListDiv = document.getElementById('shooterList');
+  const scorersDiv = document.getElementById('scorers');
+  const divisionListDiv = document.getElementById('divisionList');
+  const resultsContainer = document.getElementById('resultsContainer');
+  const shootoffContainer = document.getElementById('shootoffContainer');
+  const startBtn = document.getElementById('startScoring');
+  const scoreZoneSelect = document.getElementById('scoreZone');
+  const customContainer = document.getElementById('customScoreContainer');
+  const customInput = document.getElementById('customScores');
   const shooterDivisionSelect = document.getElementById('shooterDivision');
-  const shooterNameInput      = document.getElementById('shooterName');
-  const shooterHandicapInput  = document.getElementById('shooterHandicap');
-  const startupOverlay        = document.getElementById('startupOverlay');
-  const uploadOverlay         = document.getElementById('uploadOverlay');
-  const uploadMsg             = document.getElementById('uploadMsg');
-  const pendingBanner         = document.getElementById('pendingBanner');
-  const pendingBannerText     = document.getElementById('pendingBannerText');
-  const midSessionPanel       = document.getElementById('midSessionPanel');
-  const midShooterName        = document.getElementById('midShooterName');
-  const midShooterHandicap    = document.getElementById('midShooterHandicap');
-  const midShooterDivision    = document.getElementById('midShooterDivision');
-  const midShooterBackScores  = document.getElementById('midShooterBackScores');
-  const endsAlreadyShot       = document.getElementById('endsAlreadyShot');
+  const shooterNameInput = document.getElementById('shooterName');
+  const shooterHandicapInput = document.getElementById('shooterHandicap');
+  const startupOverlay = document.getElementById('startupOverlay');
+  const uploadOverlay = document.getElementById('uploadOverlay');
+  const uploadMsg = document.getElementById('uploadMsg');
+  const pendingBanner = document.getElementById('pendingBanner');
+  const pendingBannerText = document.getElementById('pendingBannerText');
+  const midSessionPanel = document.getElementById('midSessionPanel');
+  const midShooterName = document.getElementById('midShooterName');
+  const midShooterHandicap = document.getElementById('midShooterHandicap');
+  const midShooterDivision = document.getElementById('midShooterDivision');
+  const midShooterBackScores = document.getElementById('midShooterBackScores');
+  const endsAlreadyShot = document.getElementById('endsAlreadyShot');
 
-  // ── Overlay helpers ──────────────────────────────────────────────────────
-  function showUploadOverlay(msg) {
-    uploadMsg.textContent = msg || 'Uploading to Google Sheets…';
-    uploadOverlay.classList.remove('hidden');
-  }
+  function showUploadOverlay(msg) { uploadMsg.textContent = msg || 'Uploading to Google Sheets...'; uploadOverlay.classList.remove('hidden'); }
   function hideUploadOverlay() { uploadOverlay.classList.add('hidden'); }
-  function hideStartupOverlay() {
-    startupOverlay.classList.add('fade-out');
-    setTimeout(() => startupOverlay.classList.add('hidden'), 320);
-  }
+  function hideStartupOverlay() { startupOverlay.classList.add('fade-out'); setTimeout(() => startupOverlay.classList.add('hidden'), 320); }
 
-  // ── Session storage ──────────────────────────────────────────────────────
   function saveSessionToLocal() {
-    try {
-      localStorage.setItem('archerySession', JSON.stringify({
-        shooters, divisions, shotsPerEnd, scoreButtons, scoreMap, selectedRound,
-        timestamp: new Date().toISOString()
-      }));
-    } catch (e) { console.error('Save failed:', e); }
+    try { localStorage.setItem('archerySession', JSON.stringify({ shooters, divisions, shotsPerEnd, scoreButtons, scoreMap, selectedRound, timestamp: new Date().toISOString() })); } catch(e) {}
   }
   function loadSessionFromLocal() {
     try {
@@ -337,59 +251,49 @@ window.addEventListener('load', () => {
       const data = JSON.parse(saved);
       const savedTime = new Date(data.timestamp);
       if ((new Date() - savedTime) / 3600000 > 12) { localStorage.removeItem('archerySession'); return false; }
-      shooters      = data.shooters      || [];
-      divisions     = (data.divisions && data.divisions.length > 0) ? data.divisions : ['Open', 'A Grade', 'B Grade'];
-      shotsPerEnd   = data.shotsPerEnd   || 3;
-      scoreButtons  = data.scoreButtons  || [];
-      scoreMap      = data.scoreMap      || {};
+      shooters = data.shooters || [];
+      divisions = (data.divisions && data.divisions.length > 0) ? data.divisions : ['Open', 'A Grade', 'B Grade'];
+      shotsPerEnd = data.shotsPerEnd || 3;
+      scoreButtons = data.scoreButtons || [];
+      scoreMap = data.scoreMap || {};
       selectedRound = data.selectedRound || '';
       if (shooters.length > 0) {
-        showStatus('setupStatus', `⚠ Restored session from ${savedTime.toLocaleTimeString()}`, 'info');
+        showStatus('setupStatus', 'Restored session from ' + savedTime.toLocaleTimeString(), 'info');
         renderShooterList();
         startBtn.classList.remove('hidden');
         if (shooters.some(s => s.scores && s.scores.length > 0)) {
-          setupDiv.classList.add('hidden');
-          scoringDiv.classList.remove('hidden');
-          renderScoringScreen();
-          shooters.forEach(s => updateDisplay(s.id));
+          setupDiv.classList.add('hidden'); scoringDiv.classList.remove('hidden');
+          renderScoringScreen(); shooters.forEach(s => updateDisplay(s.id));
         }
         return true;
       }
       return false;
-    } catch (e) { console.error('Load failed:', e); return false; }
+    } catch(e) { return false; }
   }
   function clearSessionLocal() { localStorage.removeItem('archerySession'); }
 
-  // ── POST helper ──────────────────────────────────────────────────────────
   async function postToSheet(payload) {
-    const response = await fetch(appsScriptUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload)
-    });
+    const response = await fetch(appsScriptUrl, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload) });
     return response.json();
   }
 
-  // ── Load archers ─────────────────────────────────────────────────────────
   async function loadArchersFromSheet() {
-    document.getElementById('startupMsg').textContent = 'Loading archer database…';
+    document.getElementById('startupMsg').textContent = 'Loading archer database...';
     try {
-      const response = await fetch(`${appsScriptUrl}?action=getArchers`);
+      const response = await fetch(appsScriptUrl + '?action=getArchers');
       const data = await response.json();
       if (!data.success) throw new Error(data.error || 'Failed to load archers');
       archersData = data.archers || [];
-      document.getElementById('startupMsg').textContent = `✓ Loaded ${archersData.length} archers`;
-    } catch (error) {
-      console.error('Load error:', error);
+      document.getElementById('startupMsg').textContent = 'Loaded ' + archersData.length + ' archers';
+    } catch(error) {
       document.getElementById('startupMsg').textContent = 'Could not load archer database. You can still enter names manually.';
     } finally {
       setTimeout(hideStartupOverlay, 800);
     }
   }
 
-  // ── Autocomplete (shared) ────────────────────────────────────────────────
   function setupAutocomplete(inputEl, handicapEl, divisionEl) {
-    inputEl.addEventListener('input', function () {
+    inputEl.addEventListener('input', function() {
       closeAllLists();
       const val = this.value.toLowerCase().trim();
       if (!val || archersData.length === 0) return;
@@ -403,24 +307,17 @@ window.addEventListener('load', () => {
       inputEl.parentNode.appendChild(listDiv);
       matches.forEach(archer => {
         const itemDiv = document.createElement('div');
-        const fullName = `${archer.firstName} ${archer.lastName}`.trim();
-        itemDiv.innerHTML = `<strong>${fullName}</strong> <small>(${archer.grade}${archer.handicap ? ' | Hcp: ' + archer.handicap : ''})</small>`;
+        const fullName = (archer.firstName + ' ' + archer.lastName).trim();
+        itemDiv.innerHTML = '<strong>' + fullName + '</strong> <small>(' + archer.grade + (archer.handicap ? ' | Hcp: ' + archer.handicap : '') + ')</small>';
         itemDiv.addEventListener('click', () => {
           inputEl.value = fullName;
-          if (handicapEl) handicapEl.value = scoreZoneSelect.value === '11-M'
-            ? (archer.handicap11M || archer.handicap)
-            : archer.handicap;
+          if (handicapEl) handicapEl.value = scoreZoneSelect.value === '11-M' ? (archer.handicap11M || archer.handicap) : archer.handicap;
           if (divisionEl) {
             if (!divisions.includes(archer.grade) && archer.grade !== 'Overall') {
-              divisions.push(archer.grade);
-              renderDivisionList();
-              renderShooterDivisionOptions();
-              renderMidSessionDivisionOptions();
+              divisions.push(archer.grade); renderDivisionList(); renderShooterDivisionOptions(); renderMidSessionDivisionOptions();
             }
             for (let i = 0; i < divisionEl.options.length; i++) {
-              if (divisionEl.options[i].value === archer.grade) {
-                divisionEl.selectedIndex = i; break;
-              }
+              if (divisionEl.options[i].value === archer.grade) { divisionEl.selectedIndex = i; break; }
             }
           }
           closeAllLists();
@@ -432,133 +329,82 @@ window.addEventListener('load', () => {
   function closeAllLists() {
     Array.from(document.getElementsByClassName('autocomplete-items')).forEach(el => el.parentNode.removeChild(el));
   }
-  document.addEventListener('click', e => {
-    if (e.target !== shooterNameInput && e.target !== midShooterName) closeAllLists();
-  });
+  document.addEventListener('click', e => { if (e.target !== shooterNameInput && e.target !== midShooterName) closeAllLists(); });
 
   setupAutocomplete(shooterNameInput, shooterHandicapInput, shooterDivisionSelect);
   setupAutocomplete(midShooterName, midShooterHandicap, midShooterDivision);
 
-  // ── UI helpers ───────────────────────────────────────────────────────────
-  function showStatus(id, msg, type) {
-    document.getElementById(id).innerHTML = `<div class="status ${type}">${msg}</div>`;
-  }
+  function showStatus(id, msg, type) { document.getElementById(id).innerHTML = '<div class="status ' + type + '">' + msg + '</div>'; }
+
   function renderDivisionList() {
     divisionListDiv.innerHTML = '';
-    divisions.forEach(d => {
-      const p = document.createElement('p');
-      p.className = 'division-name';
-      p.textContent = d;
-      divisionListDiv.appendChild(p);
-    });
+    divisions.forEach(d => { const p = document.createElement('p'); p.className = 'division-name'; p.textContent = d; divisionListDiv.appendChild(p); });
   }
   function renderShooterList() {
     shooterListDiv.innerHTML = '';
     shooters.forEach((shooter, index) => {
-      const div = document.createElement('div');
-      div.className = 'shooter-item';
+      const div = document.createElement('div'); div.className = 'shooter-item';
       const span = document.createElement('span');
-      span.textContent = `${shooter.name} (${shooter.division}${shooter.handicap ? ' – Hcp:' + shooter.handicap : ''})`;
+      span.textContent = shooter.name + ' (' + shooter.division + (shooter.handicap ? ' - Hcp:' + shooter.handicap : '') + ')';
       div.appendChild(span);
-      if (index > 0) {
-        const upBtn = document.createElement('button'); upBtn.textContent = '↑';
-        upBtn.addEventListener('click', () => moveShooter(index, -1)); div.appendChild(upBtn);
-      }
-      if (index < shooters.length - 1) {
-        const downBtn = document.createElement('button'); downBtn.textContent = '↓';
-        downBtn.addEventListener('click', () => moveShooter(index, 1)); div.appendChild(downBtn);
-      }
-      const removeBtn = document.createElement('button');
-      removeBtn.textContent = '✕'; removeBtn.style.background = '#dc3545';
-      removeBtn.addEventListener('click', () => {
-        shooters.splice(index, 1);
-        if (shooters.length === 0) startBtn.classList.add('hidden');
-        renderShooterList(); saveSessionToLocal();
-      });
-      div.appendChild(removeBtn);
-      shooterListDiv.appendChild(div);
+      if (index > 0) { const upBtn = document.createElement('button'); upBtn.textContent = 'Up'; upBtn.addEventListener('click', () => moveShooter(index, -1)); div.appendChild(upBtn); }
+      if (index < shooters.length - 1) { const downBtn = document.createElement('button'); downBtn.textContent = 'Dn'; downBtn.addEventListener('click', () => moveShooter(index, 1)); div.appendChild(downBtn); }
+      const removeBtn = document.createElement('button'); removeBtn.textContent = 'X'; removeBtn.style.background = '#dc3545';
+      removeBtn.addEventListener('click', () => { shooters.splice(index, 1); if (shooters.length === 0) startBtn.classList.add('hidden'); renderShooterList(); saveSessionToLocal(); });
+      div.appendChild(removeBtn); shooterListDiv.appendChild(div);
     });
   }
   function moveShooter(index, direction) {
-    const newIndex = index + direction;
-    if (newIndex < 0 || newIndex >= shooters.length) return;
-    [shooters[index], shooters[newIndex]] = [shooters[newIndex], shooters[index]];
-    renderShooterList(); saveSessionToLocal();
+    const ni = index + direction; if (ni < 0 || ni >= shooters.length) return;
+    [shooters[index], shooters[ni]] = [shooters[ni], shooters[index]]; renderShooterList(); saveSessionToLocal();
   }
   function renderShooterDivisionOptions() {
-    shooterDivisionSelect.innerHTML = '';
-    const opt = document.createElement('option'); opt.value = 'Overall'; opt.textContent = 'Overall';
-    shooterDivisionSelect.appendChild(opt);
-    divisions.forEach(d => {
-      const o = document.createElement('option'); o.value = d; o.textContent = d;
-      shooterDivisionSelect.appendChild(o);
-    });
+    shooterDivisionSelect.innerHTML = '<option value="Overall">Overall</option>';
+    divisions.forEach(d => { const o = document.createElement('option'); o.value = d; o.textContent = d; shooterDivisionSelect.appendChild(o); });
   }
   function renderMidSessionDivisionOptions() {
-    midShooterDivision.innerHTML = '';
-    const opt = document.createElement('option'); opt.value = 'Overall'; opt.textContent = 'Overall';
-    midShooterDivision.appendChild(opt);
-    divisions.forEach(d => {
-      const o = document.createElement('option'); o.value = d; o.textContent = d;
-      midShooterDivision.appendChild(o);
-    });
+    midShooterDivision.innerHTML = '<option value="Overall">Overall</option>';
+    divisions.forEach(d => { const o = document.createElement('option'); o.value = d; o.textContent = d; midShooterDivision.appendChild(o); });
   }
-  scoreZoneSelect.addEventListener('change', () => {
-    customContainer.classList.toggle('hidden', scoreZoneSelect.value !== 'Other');
-  });
 
-  // ── Add division ─────────────────────────────────────────────────────────
+  scoreZoneSelect.addEventListener('change', () => { customContainer.classList.toggle('hidden', scoreZoneSelect.value !== 'Other'); });
+
   document.getElementById('addDivision').addEventListener('click', () => {
-    const name = document.getElementById('divisionName').value.trim();
-    if (!name) return;
+    const name = document.getElementById('divisionName').value.trim(); if (!name) return;
     divisions.push(name); renderDivisionList(); renderShooterDivisionOptions(); renderMidSessionDivisionOptions();
     document.getElementById('divisionName').value = ''; saveSessionToLocal();
   });
 
-  // ── Add shooter (setup screen) ───────────────────────────────────────────
   document.getElementById('addShooter').addEventListener('click', async () => {
-    const name     = shooterNameInput.value.trim();
-    const handicap = shooterHandicapInput.value.trim();
-    const division = shooterDivisionSelect.value;
+    const name = shooterNameInput.value.trim(); const handicap = shooterHandicapInput.value.trim(); const division = shooterDivisionSelect.value;
     if (!name) return;
     const nameLower = name.toLowerCase().trim().replace(/\s+/g, ' ');
-    const existing  = archersData.find(a =>
-      `${a.firstName} ${a.lastName}`.toLowerCase().trim().replace(/\s+/g, ' ') === nameLower
-    );
+    const existing = archersData.find(a => (a.firstName + ' ' + a.lastName).toLowerCase().trim().replace(/\s+/g, ' ') === nameLower);
     if (!existing && appsScriptUrl) {
       showStatus('setupStatus', 'Adding new archer to database...', 'info');
       const parts = name.split(' ');
       try {
-        const result = await postToSheet({ action: 'addArcher', firstName: parts[0]||'', lastName: parts.slice(1).join(' ')||'', grade: division, handicap: handicap||'' });
+        const result = await postToSheet({ action:'addArcher', firstName:parts[0]||'', lastName:parts.slice(1).join(' ')||'', grade:division, handicap:handicap||'' });
         if (!result.success) throw new Error(result.error || 'Unknown error');
         await loadArchersFromSheet();
-        showStatus('setupStatus', `✓ Added ${name} to database`, 'success');
+        showStatus('setupStatus', 'Added ' + name + ' to database', 'success');
         setTimeout(() => document.getElementById('setupStatus').innerHTML = '', 3000);
-      } catch (error) {
-        showStatus('setupStatus', 'Error adding archer: ' + error.message, 'error'); return;
-      }
+      } catch(error) { showStatus('setupStatus', 'Error adding archer: ' + error.message, 'error'); return; }
     }
     const id = 'shooter-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-    shooters.push({ id, name, division, handicap, scores: [] });
-    renderShooterList();
-    shooterNameInput.value = ''; shooterHandicapInput.value = ''; shooterDivisionSelect.value = 'Overall';
+    shooters.push({ id, name, division, handicap, scores:[] });
+    renderShooterList(); shooterNameInput.value = ''; shooterHandicapInput.value = ''; shooterDivisionSelect.value = 'Overall';
     if (shooters.length > 0) startBtn.classList.remove('hidden');
     saveSessionToLocal();
   });
 
-  // ── Start scoring ────────────────────────────────────────────────────────
   startBtn.addEventListener('click', () => {
-    shotsPerEnd   = parseInt(document.getElementById('shotsPerEnd').value, 10);
+    shotsPerEnd = parseInt(document.getElementById('shotsPerEnd').value, 10);
     selectedRound = scoreZoneSelect.value;
     if (selectedRound === 'Other') {
       scoreButtons = customInput.value.split(',').map(s => s.trim()).filter(s => s);
     } else {
-      const zones = {
-        'X-M': ['X','10','9','8','7','6','5','4','3','2','1','M'],
-        '12-M': ['12','11','10','9','8','7','6','5','4','3','2','1','M'],
-        '11-M': ['11','10','9','8','7','6','5','4','3','2','1','M'],
-        '10-M': ['10','9','8','7','6','5','4','3','2','1','M']
-      };
+      const zones = { 'X-M':['X','10','9','8','7','6','5','4','3','2','1','M'], '12-M':['12','11','10','9','8','7','6','5','4','3','2','1','M'], '11-M':['11','10','9','8','7','6','5','4','3','2','1','M'], '10-M':['10','9','8','7','6','5','4','3','2','1','M'] };
       scoreButtons = zones[selectedRound] || zones['X-M'];
     }
     scoreMap = {};
@@ -567,491 +413,360 @@ window.addEventListener('load', () => {
     renderScoringScreen(); renderMidSessionDivisionOptions(); saveSessionToLocal();
   });
 
-  // ── Add shooter mid-session ──────────────────────────────────────────────
   document.getElementById('addShooterMidSession').addEventListener('click', () => {
-    const endsShot = shooters.length > 0
-      ? Math.floor(Math.max(...shooters.map(s => s.scores.length)) / shotsPerEnd)
-      : 0;
+    const endsShot = shooters.length > 0 ? Math.floor(Math.max(...shooters.map(s => s.scores.length)) / shotsPerEnd) : 0;
     endsAlreadyShot.textContent = endsShot;
-    midShooterBackScores.value = '';
-    midShooterName.value = '';
-    midShooterHandicap.value = '';
-    midShooterDivision.value = 'Overall';
-    midSessionPanel.classList.remove('hidden');
-    document.getElementById('midSessionStatus').innerHTML = '';
-    midShooterName.focus();
+    midShooterBackScores.value = ''; midShooterName.value = ''; midShooterHandicap.value = ''; midShooterDivision.value = 'Overall';
+    midSessionPanel.classList.remove('hidden'); document.getElementById('midSessionStatus').innerHTML = ''; midShooterName.focus();
   });
-
-  document.getElementById('cancelMidShooter').addEventListener('click', () => {
-    midSessionPanel.classList.add('hidden');
-  });
-
+  document.getElementById('cancelMidShooter').addEventListener('click', () => { midSessionPanel.classList.add('hidden'); });
   document.getElementById('confirmMidShooter').addEventListener('click', async () => {
-    const name     = midShooterName.value.trim();
-    const handicap = midShooterHandicap.value.trim();
-    const division = midShooterDivision.value;
+    const name = midShooterName.value.trim(); const handicap = midShooterHandicap.value.trim(); const division = midShooterDivision.value;
     if (!name) { showStatus('midSessionStatus', 'Please enter a name.', 'error'); return; }
-
-    // Check/add to database
     const nameLower = name.toLowerCase().trim().replace(/\s+/g, ' ');
-    const existing  = archersData.find(a =>
-      `${a.firstName} ${a.lastName}`.toLowerCase().trim().replace(/\s+/g, ' ') === nameLower
-    );
+    const existing = archersData.find(a => (a.firstName + ' ' + a.lastName).toLowerCase().trim().replace(/\s+/g, ' ') === nameLower);
     if (!existing) {
       showStatus('midSessionStatus', 'Adding to database...', 'info');
       const parts = name.split(' ');
       try {
-        const result = await postToSheet({ action: 'addArcher', firstName: parts[0]||'', lastName: parts.slice(1).join(' ')||'', grade: division, handicap: handicap||'' });
+        const result = await postToSheet({ action:'addArcher', firstName:parts[0]||'', lastName:parts.slice(1).join(' ')||'', grade:division, handicap:handicap||'' });
         if (!result.success) throw new Error(result.error || 'Unknown error');
         await loadArchersFromSheet();
-      } catch (error) {
-        showStatus('midSessionStatus', 'Error adding to database: ' + error.message, 'error'); return;
-      }
+      } catch(error) { showStatus('midSessionStatus', 'Error: ' + error.message, 'error'); return; }
     }
-
-    // Parse any back-entered scores
     const backScores = [];
-    const lines = midShooterBackScores.value.trim().split('\n').filter(l => l.trim());
-    lines.forEach(line => {
-      const vals = line.split(',').map(v => v.trim()).filter(v => v);
-      vals.forEach(v => {
-        backScores.push({ label: v, value: scoreMap[v] !== undefined ? scoreMap[v] : (v === 'X' ? 10 : v === 'M' ? 0 : parseInt(v,10)||0) });
+    midShooterBackScores.value.trim().split('\n').filter(l => l.trim()).forEach(line => {
+      line.split(',').map(v => v.trim()).filter(v => v).forEach(v => {
+        backScores.push({ label:v, value:scoreMap[v]!==undefined ? scoreMap[v] : (v==='X'?10:v==='M'?0:parseInt(v,10)||0) });
       });
     });
-
     const id = 'shooter-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-    shooters.push({ id, name, division, handicap, scores: backScores, lateAddition: true });
-
-    // Add their card to the scoring screen
-    renderScoringScreen();
-    shooters.forEach(s => updateDisplay(s.id));
-    saveSessionToLocal();
+    shooters.push({ id, name, division, handicap, scores:backScores, lateAddition:true });
+    renderScoringScreen(); shooters.forEach(s => updateDisplay(s.id)); saveSessionToLocal();
     midSessionPanel.classList.add('hidden');
-    showStatus('midSessionStatus', '', 'info');
-
-    // Scroll to their new card
-    setTimeout(() => {
-      const cards = document.querySelectorAll('.shooter');
-      if (cards.length > 0) cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+    setTimeout(() => { const cards = document.querySelectorAll('.shooter'); if (cards.length > 0) cards[cards.length-1].scrollIntoView({ behavior:'smooth', block:'start' }); }, 100);
   });
 
-  // ── Scoring screen ───────────────────────────────────────────────────────
   function renderScoringScreen() {
     scorersDiv.innerHTML = '';
     shooters.forEach((shooter, index) => {
-      const shooterId = shooter.id;
+      const sid = shooter.id;
       const div = document.createElement('div'); div.className = 'shooter';
       if (shooter.lateAddition) div.style.borderLeft = '4px solid #fd7e14';
       const nameDiv = document.createElement('div'); nameDiv.className = 'shooter-name';
       const nameSpan = document.createElement('span');
-      nameSpan.textContent = `${shooter.name} (${shooter.division}${shooter.handicap ? ' – Hcp:' + shooter.handicap : ''})${shooter.lateAddition ? ' ⏱' : ''}`;
+      nameSpan.textContent = shooter.name + ' (' + shooter.division + (shooter.handicap ? ' - Hcp:' + shooter.handicap : '') + ')' + (shooter.lateAddition ? ' (late)' : '');
       nameDiv.appendChild(nameSpan);
       const reorderDiv = document.createElement('div'); reorderDiv.className = 'reorder-buttons';
-      if (index > 0) {
-        const up = document.createElement('button'); up.textContent = '↑';
-        up.addEventListener('click', () => moveScoringShooter(index, -1)); reorderDiv.appendChild(up);
-      }
-      if (index < shooters.length - 1) {
-        const down = document.createElement('button'); down.textContent = '↓';
-        down.addEventListener('click', () => moveScoringShooter(index, 1)); reorderDiv.appendChild(down);
-      }
+      if (index > 0) { const up = document.createElement('button'); up.textContent = 'Up'; up.addEventListener('click', () => moveScoringShooter(index, -1)); reorderDiv.appendChild(up); }
+      if (index < shooters.length-1) { const dn = document.createElement('button'); dn.textContent = 'Dn'; dn.addEventListener('click', () => moveScoringShooter(index, 1)); reorderDiv.appendChild(dn); }
       nameDiv.appendChild(reorderDiv); div.appendChild(nameDiv);
-      const arrowsDiv = document.createElement('div'); arrowsDiv.className = 'arrows'; arrowsDiv.id = `arrows-${shooterId}`; div.appendChild(arrowsDiv);
+      const arrowsDiv = document.createElement('div'); arrowsDiv.className = 'arrows'; arrowsDiv.id = 'arrows-' + sid; div.appendChild(arrowsDiv);
       const btnDiv = document.createElement('div'); btnDiv.className = 'score-buttons';
-      scoreButtons.forEach(val => {
-        const b = document.createElement('button'); b.textContent = val;
-        b.addEventListener('click', () => addScore(shooterId, val)); btnDiv.appendChild(b);
-      });
+      scoreButtons.forEach(val => { const b = document.createElement('button'); b.textContent = val; b.addEventListener('click', () => addScore(sid, val)); btnDiv.appendChild(b); });
       div.appendChild(btnDiv);
-      const undoBtn = document.createElement('button'); undoBtn.textContent = 'Undo'; undoBtn.className = 'undo';
-      undoBtn.addEventListener('click', () => undoScore(shooterId)); div.appendChild(undoBtn);
-      const total = document.createElement('div'); total.className = 'total'; total.id = `total-${shooterId}`; total.textContent = 'Total: 0 (0 shots)'; div.appendChild(total);
+      const undoBtn = document.createElement('button'); undoBtn.textContent = 'Undo'; undoBtn.className = 'undo'; undoBtn.addEventListener('click', () => undoScore(sid)); div.appendChild(undoBtn);
+      const total = document.createElement('div'); total.className = 'total'; total.id = 'total-' + sid; total.textContent = 'Total: 0 (0 shots)'; div.appendChild(total);
       scorersDiv.appendChild(div);
     });
   }
   function moveScoringShooter(index, direction) {
-    const newIndex = index + direction;
-    if (newIndex < 0 || newIndex >= shooters.length) return;
-    [shooters[index], shooters[newIndex]] = [shooters[newIndex], shooters[index]];
+    const ni = index + direction; if (ni < 0 || ni >= shooters.length) return;
+    [shooters[index], shooters[ni]] = [shooters[ni], shooters[index]];
     renderScoringScreen(); shooters.forEach(s => updateDisplay(s.id)); saveSessionToLocal();
   }
-  function addScore(shooterId, label) {
-    const shooter = shooters.find(s => s.id === shooterId); if (!shooter) return;
-    shooter.scores.push({ label, value: scoreMap[label] ?? 0 }); updateDisplay(shooterId); saveSessionToLocal();
+  function addScore(sid, label) {
+    const s = shooters.find(s => s.id === sid); if (!s) return;
+    s.scores.push({ label, value:scoreMap[label]??0 }); updateDisplay(sid); saveSessionToLocal();
   }
-  function undoScore(shooterId) {
-    const shooter = shooters.find(s => s.id === shooterId); if (!shooter || shooter.scores.length === 0) return;
-    shooter.scores.pop(); updateDisplay(shooterId); saveSessionToLocal();
-    if (!resultsDiv.classList.contains('hidden')) showResults();
+  function undoScore(sid) {
+    const s = shooters.find(s => s.id === sid); if (!s || s.scores.length === 0) return;
+    s.scores.pop(); updateDisplay(sid); saveSessionToLocal();
+    if (!resultsDiv.classList.contains('hidden')) { showResults(); showShootoff(); }
   }
-  function updateDisplay(shooterId) {
-    const shooter = shooters.find(s => s.id === shooterId); if (!shooter) return;
-    const arrowsDiv = document.getElementById(`arrows-${shooterId}`); if (!arrowsDiv) return;
+  function updateDisplay(sid) {
+    const shooter = shooters.find(s => s.id === sid); if (!shooter) return;
+    const arrowsDiv = document.getElementById('arrows-' + sid); if (!arrowsDiv) return;
     arrowsDiv.innerHTML = '';
     shooter.scores.forEach((s, i) => {
-      if (i > 0 && i % shotsPerEnd === 0) { const sep = document.createElement('span'); sep.style.fontWeight='bold'; sep.textContent=' | '; arrowsDiv.appendChild(sep); }
+      if (i > 0 && i % shotsPerEnd === 0) { const sep = document.createElement('span'); sep.style.fontWeight = 'bold'; sep.textContent = ' | '; arrowsDiv.appendChild(sep); }
       else if (i > 0) arrowsDiv.appendChild(document.createTextNode(' '));
       arrowsDiv.appendChild(document.createTextNode(s.label));
     });
-    const total = shooter.scores.reduce((a,b)=>a+b.value,0);
+    const total = shooter.scores.reduce((a,b) => a+b.value, 0);
     const avg = shooter.scores.length > 0 ? (total/shooter.scores.length).toFixed(2) : 0;
     const hcapVal = parseFloat(shooter.handicap)||0;
-    document.getElementById(`total-${shooterId}`).textContent = `Total: ${total} | Hcap Total: ${(total+hcapVal).toFixed(2)} | Avg: ${avg} (${shooter.scores.length} shots)`;
+    document.getElementById('total-' + sid).textContent = 'Total: ' + total + ' | Hcap Total: ' + (total+hcapVal).toFixed(2) + ' | Avg: ' + avg + ' (' + shooter.scores.length + ' shots)';
   }
 
-  // ── Build scores payload ─────────────────────────────────────────────────
+  // ── Shared shoot-off calculation ─────────────────────────────────────────
+  function calcShootoffResults() {
+    const processed = shooters.map(s => {
+      const total = s.scores.reduce((a,b) => a+b.value, 0);
+      const xCount = s.scores.filter(sc => sc.label === 'X').length;
+      const hcapVal = parseFloat(s.handicap)||0;
+      return { ...s, total, xCount, hcapTotal:parseFloat((total+hcapVal).toFixed(2)) };
+    });
+    const withHandicap = processed.filter(s => s.handicap && s.handicap.trim() !== '').sort((a,b) => b.hcapTotal - a.hcapTotal);
+    const handicapWinner = withHandicap.length > 0 ? withHandicap[0] : null;
+    const hwId = handicapWinner ? handicapWinner.id : null;
+    const so1Ids = new Set();
+    const divisionWinners = {};
+    ['Open', 'A Grade', 'B Grade'].forEach(div => {
+      const inDiv = processed.filter(s => s.division === div && s.id !== hwId).sort((a,b) => b.total - a.total || b.xCount - a.xCount);
+      if (inDiv.length > 0) { divisionWinners[div] = inDiv[0]; so1Ids.add(inDiv[0].id); }
+    });
+    const unranked = processed.filter(s => !divisions.includes(s.division) && s.id !== hwId).sort((a,b) => b.total - a.total || b.xCount - a.xCount);
+    const unrankedWinner = unranked.length > 0 ? unranked[0] : null;
+    if (unrankedWinner) so1Ids.add(unrankedWinner.id);
+    return { processed, handicapWinner, hwId, divisionWinners, unrankedWinner, so1Ids };
+  }
+
+  // ── Build payload with win flags ─────────────────────────────────────────
   function buildScoresPayload() {
     const today = new Date().toISOString().split('T')[0];
+    const { handicapWinner, divisionWinners, unrankedWinner } = calcShootoffResults();
+    const divWinnerIds = new Set([
+      ...Object.values(divisionWinners).map(s => s.id),
+      ...(unrankedWinner ? [unrankedWinner.id] : [])
+    ]);
     return shooters.map(shooter => {
-      const total = shooter.scores.reduce((a,b)=>a+b.value,0);
-      const xCount = shooter.scores.filter(s=>s.label==='X').length;
-      const x10Count = shooter.scores.filter(s=>s.label==='X'||s.label==='10').length;
+      const total = shooter.scores.reduce((a,b) => a+b.value, 0);
+      const xCount = shooter.scores.filter(s => s.label === 'X').length;
+      const x10Count = shooter.scores.filter(s => s.label === 'X' || s.label === '10').length;
       const hcapVal = parseFloat(shooter.handicap)||0;
-      const match = archersData.find(a => `${a.firstName} ${a.lastName}`.toLowerCase().trim()===shooter.name.toLowerCase().trim());
-      return { date:today, uid:match?match.uid:'', score:total, xCount, x10Count, handicapScore:total+hcapVal, sessionInfo:`Week ${getWeekNumber()}`, elevenMScore:selectedRound==='11-M'?total:'', roundSelected:selectedRound };
+      const match = archersData.find(a => (a.firstName + ' ' + a.lastName).toLowerCase().trim() === shooter.name.toLowerCase().trim());
+      return {
+        date:         today,
+        uid:          match ? match.uid : '',
+        score:        total,
+        xCount:       xCount !== undefined ? xCount : 0,
+        x10Count:     x10Count !== undefined ? x10Count : 0,
+        handicapScore: total + hcapVal,
+        sessionInfo:  'Week ' + getWeekNumber(),
+        elevenMScore: selectedRound === '11-M' ? total : '',
+        roundSelected: selectedRound,
+        handicapWin:  handicapWinner && shooter.id === handicapWinner.id ? 1 : 0,
+        divisionWin:  divWinnerIds.has(shooter.id) ? 1 : 0
+      };
     });
   }
 
   async function writeScoresToSheet(scores) {
-    const result = await postToSheet({ action: 'writeScores', scores });
+    const result = await postToSheet({ action:'writeScores', scores });
     if (!result.success) throw new Error(result.error || 'Unknown error');
     return result;
   }
 
   const sheetUrl = 'https://docs.google.com/spreadsheets/d/1NzpQa0gdpI1tiUn6hwvzGHn4qVTnC4eet_ppwpSnjow/edit?gid=720351764#gid=720351764';
 
-  // ── End session ──────────────────────────────────────────────────────────
   document.getElementById('endSession').addEventListener('click', async () => {
     scoringDiv.classList.add('hidden'); resultsDiv.classList.remove('hidden');
     showResults(); showShootoff();
     const scores = buildScoresPayload();
     savePendingUpload(scores);
-    showUploadOverlay('Uploading scores to Google Sheets…');
+    showUploadOverlay('Uploading scores to Google Sheets...');
     try {
       await writeScoresToSheet(scores);
       clearPendingUpload(); clearSessionLocal(); hideUploadOverlay();
-      showStatus('resultsStatus', `✓ Scores saved! (${scores.length} entries) &nbsp;<a href="${sheetUrl}" target="_blank">View Sheet ↗</a>`, 'success');
+      showStatus('resultsStatus', 'Scores saved! (' + scores.length + ' entries) <a href="' + sheetUrl + '" target="_blank">View Sheet</a>', 'success');
       pendingBanner.classList.add('hidden');
-    } catch (error) {
-      console.error('Upload error:', error); hideUploadOverlay();
-      showStatus('resultsStatus', '⚠ Upload failed. Scores saved locally — use Retry below.', 'error');
-      pendingBannerText.textContent = `⚠ ${scores.length} score(s) not yet uploaded. Tap Retry when you have signal.`;
+    } catch(error) {
+      hideUploadOverlay();
+      showStatus('resultsStatus', 'Upload failed. Scores saved locally - use Retry below.', 'error');
+      pendingBannerText.textContent = scores.length + ' score(s) not yet uploaded. Tap Retry when you have signal.';
       pendingBanner.classList.remove('hidden');
     }
   });
 
-  // ── Retry upload ─────────────────────────────────────────────────────────
   document.getElementById('retryUploadBtn').addEventListener('click', async () => {
-    const pending = getPendingUpload();
-    if (!pending) { pendingBanner.classList.add('hidden'); return; }
-    showUploadOverlay('Retrying upload…');
+    const pending = getPendingUpload(); if (!pending) { pendingBanner.classList.add('hidden'); return; }
+    showUploadOverlay('Retrying upload...');
     try {
       await writeScoresToSheet(pending.scores);
-      clearPendingUpload(); clearSessionLocal(); hideUploadOverlay();
-      pendingBanner.classList.add('hidden');
-      showStatus('resultsStatus', `✓ Scores uploaded successfully! &nbsp;<a href="${sheetUrl}" target="_blank">View Sheet ↗</a>`, 'success');
-    } catch (error) {
-      hideUploadOverlay();
-      showStatus('resultsStatus', '⚠ Retry failed. Keep this page open and try again later.', 'error');
-    }
+      clearPendingUpload(); clearSessionLocal(); hideUploadOverlay(); pendingBanner.classList.add('hidden');
+      showStatus('resultsStatus', 'Scores uploaded! <a href="' + sheetUrl + '" target="_blank">View Sheet</a>', 'success');
+    } catch(error) { hideUploadOverlay(); showStatus('resultsStatus', 'Retry failed. Keep this page open and try again later.', 'error'); }
   });
 
-  // ── Dismiss pending ──────────────────────────────────────────────────────
   document.getElementById('dismissUploadBtn').addEventListener('click', () => {
-    if (!confirm('Are you sure you want to delete the pending upload? These scores will NOT be saved to the database.')) return;
-    clearPendingUpload(); clearSessionLocal();
-    pendingBanner.classList.add('hidden');
-    showStatus('resultsStatus', 'Pending upload dismissed and deleted.', 'info');
+    if (!confirm('Delete the pending upload? These scores will NOT be saved.')) return;
+    clearPendingUpload(); clearSessionLocal(); pendingBanner.classList.add('hidden');
+    showStatus('resultsStatus', 'Pending upload deleted.', 'info');
   });
 
-  // ── Pending on load ──────────────────────────────────────────────────────
   function checkPendingOnLoad() {
-    const pending = getPendingUpload();
-    if (!pending) return;
+    const pending = getPendingUpload(); if (!pending) return;
     const savedAt = new Date(pending.savedAt);
-    if ((new Date() - savedAt) / 3600000 < 48) {
-      pendingBannerText.textContent = `⚠ ${pending.scores.length} score(s) from ${savedAt.toLocaleDateString()} not uploaded.`;
-      pendingBanner.classList.remove('hidden');
-      setupDiv.insertBefore(pendingBanner, setupDiv.firstChild);
-    } else {
-      clearPendingUpload();
-    }
+    if ((new Date()-savedAt)/3600000 < 48) {
+      pendingBannerText.textContent = pending.scores.length + ' score(s) from ' + savedAt.toLocaleDateString() + ' not uploaded.';
+      pendingBanner.classList.remove('hidden'); setupDiv.insertBefore(pendingBanner, setupDiv.firstChild);
+    } else { clearPendingUpload(); }
   }
 
   function getWeekNumber() {
     const d = new Date(); const oneJan = new Date(d.getFullYear(), 0, 1);
-    return Math.ceil((((d - oneJan) / 86400000) + oneJan.getDay() + 1) / 7);
+    return Math.ceil((((d-oneJan)/86400000)+oneJan.getDay()+1)/7);
   }
 
-  // ── Results tabs ─────────────────────────────────────────────────────────
   document.getElementById('tabResults').addEventListener('click', () => {
-    document.getElementById('tabResults').classList.add('active');
-    document.getElementById('tabShootoff').classList.remove('active');
-    resultsContainer.classList.remove('hidden');
-    shootoffContainer.classList.add('hidden');
+    document.getElementById('tabResults').classList.add('active'); document.getElementById('tabShootoff').classList.remove('active');
+    resultsContainer.classList.remove('hidden'); shootoffContainer.classList.add('hidden');
   });
   document.getElementById('tabShootoff').addEventListener('click', () => {
-    document.getElementById('tabShootoff').classList.add('active');
-    document.getElementById('tabResults').classList.remove('active');
-    shootoffContainer.classList.remove('hidden');
-    resultsContainer.classList.add('hidden');
+    document.getElementById('tabShootoff').classList.add('active'); document.getElementById('tabResults').classList.remove('active');
+    shootoffContainer.classList.remove('hidden'); resultsContainer.classList.add('hidden');
   });
 
-  // ── Results ──────────────────────────────────────────────────────────────
-  function chunkArray(arr, size) {
-    const result = []; for (let i=0; i<arr.length; i+=size) result.push(arr.slice(i,i+size)); return result;
-  }
+  function chunkArray(arr, size) { const r=[]; for(let i=0;i<arr.length;i+=size) r.push(arr.slice(i,i+size)); return r; }
+
   function showResults() {
     resultsContainer.innerHTML = '';
     const divisionThemes = {
-      'Open':     { header:'#b8860b', text:'#fff' },
-      'A Grade':  { header:'#a00000', text:'#fff' },
-      'B Grade':  { header:'#003580', text:'#fff' },
-      'Handicap': { header:'#222222', text:'#fff' },
-      'Unranked': { header:'#ffffff', text:'#000000', border:'2px solid #000' },
+      'Open':{ header:'#b8860b', text:'#fff' }, 'A Grade':{ header:'#a00000', text:'#fff' },
+      'B Grade':{ header:'#003580', text:'#fff' }, 'Handicap':{ header:'#222222', text:'#fff' },
+      'Unranked':{ header:'#ffffff', text:'#000000', border:'2px solid #000' }
     };
     function renderDivision(divName, list, sortByHandicap) {
       if (list.length === 0) return;
       const processed = list.map(s => {
-        const total = s.scores.reduce((a,b)=>a+b.value,0);
-        const xCount = s.scores.filter(sc=>sc.label==='X').length;
+        const total = s.scores.reduce((a,b)=>a+b.value,0); const xCount = s.scores.filter(sc=>sc.label==='X').length;
         const hcapVal = parseFloat(s.handicap)||0;
         return {...s, total, xCount, hcapTotal:parseFloat((total+hcapVal).toFixed(2)), avg:s.scores.length>0?(total/s.scores.length).toFixed(2):0};
       });
       processed.sort((a,b) => sortByHandicap ? b.hcapTotal-a.hcapTotal : b.total-a.total);
       const theme = divisionThemes[divName] || { header:'#007bff', text:'#fff' };
       const h = document.createElement('h3');
-      h.textContent = `Division: ${divName}`;
-      h.style.cssText = `background:${theme.header}; color:${theme.text}; padding:0.6rem 1rem; border-radius:8px 8px 0 0; margin-bottom:0; ${theme.border?'border:'+theme.border:''}`;
+      h.textContent = 'Division: ' + divName;
+      h.style.cssText = 'background:' + theme.header + '; color:' + theme.text + '; padding:0.6rem 1rem; border-radius:8px 8px 0 0; margin-bottom:0;' + (theme.border ? ' border:' + theme.border : '');
       resultsContainer.appendChild(h);
       processed.forEach((shooter, idx) => {
-        const isWinner = idx===0;
-        const ends = chunkArray(shooter.scores, shotsPerEnd);
+        const isWinner = idx === 0; const ends = chunkArray(shooter.scores, shotsPerEnd);
         const table = document.createElement('table');
-        table.style.cssText = `margin-bottom:0; border-radius:0; ${isWinner?'background:#fffbe6;':''}`;
-        const xDisp = shooter.xCount>0 ? ` | X's: ${shooter.xCount}` : '';
+        table.style.cssText = 'margin-bottom:0; border-radius:0;' + (isWinner ? ' background:#fffbe6;' : '');
+        const xDisp = shooter.xCount > 0 ? " | X's: " + shooter.xCount : '';
         const scoreDisplay = sortByHandicap
-          ? `Total: ${shooter.total} | <span class="highlight-score">Hcap Total: ${shooter.hcapTotal}</span> | Avg: ${shooter.avg}${xDisp}`
-          : `<span class="highlight-score">Total: ${shooter.total}</span> | Hcap Total: ${shooter.hcapTotal} | Avg: ${shooter.avg}${xDisp}`;
+          ? 'Total: ' + shooter.total + ' | <span class="highlight-score">Hcap Total: ' + shooter.hcapTotal + '</span> | Avg: ' + shooter.avg + xDisp
+          : '<span class="highlight-score">Total: ' + shooter.total + '</span> | Hcap Total: ' + shooter.hcapTotal + ' | Avg: ' + shooter.avg + xDisp;
         const thead = document.createElement('thead');
-        thead.innerHTML = `<tr><th colspan="${shotsPerEnd+2}" style="background:${theme.header}cc; color:${theme.text};"><span class="shooter-header-name" style="${isWinner?'text-decoration:underline;':''}">${isWinner?'🏆 ':''}${shooter.name}</span>${shooter.handicap?' – Hcp:'+shooter.handicap:''} | ${scoreDisplay}</th></tr>`;
+        thead.innerHTML = '<tr><th colspan="' + (shotsPerEnd+2) + '" style="background:' + theme.header + 'cc; color:' + theme.text + ';"><span class="shooter-header-name" style="' + (isWinner?'text-decoration:underline;':'') + '">' + (isWinner?'Trophy ':'' ) + shooter.name + '</span>' + (shooter.handicap?' - Hcp:'+shooter.handicap:'') + ' | ' + scoreDisplay + '</th></tr>';
         table.appendChild(thead);
         const tbody = document.createElement('tbody');
         ends.forEach((endArr, i) => {
-          const row = document.createElement('tr');
-          const endCell = document.createElement('td'); endCell.textContent = `End ${i+1}`; row.appendChild(endCell);
+          const row = document.createElement('tr'); const endCell = document.createElement('td'); endCell.textContent = 'End ' + (i+1); row.appendChild(endCell);
           let endTotal = 0;
-          for (let j=0; j<shotsPerEnd; j++) {
-            const td = document.createElement('td');
-            if (endArr[j]) { td.textContent=endArr[j].label; endTotal+=endArr[j].value; }
-            row.appendChild(td);
-          }
-          const totCell = document.createElement('td'); totCell.textContent=endTotal; row.appendChild(totCell);
-          tbody.appendChild(row);
+          for (let j = 0; j < shotsPerEnd; j++) { const td = document.createElement('td'); if (endArr[j]) { td.textContent = endArr[j].label; endTotal += endArr[j].value; } row.appendChild(td); }
+          const totCell = document.createElement('td'); totCell.textContent = endTotal; row.appendChild(totCell); tbody.appendChild(row);
         });
         table.appendChild(tbody); resultsContainer.appendChild(table);
       });
-      const spacer = document.createElement('div'); spacer.style.marginBottom='1.5rem'; resultsContainer.appendChild(spacer);
+      const spacer = document.createElement('div'); spacer.style.marginBottom = '1.5rem'; resultsContainer.appendChild(spacer);
     }
-    divisions.forEach(div => renderDivision(div, shooters.filter(s=>s.division===div), div==='B Grade'));
-    renderDivision('Handicap', shooters.filter(s=>s.handicap&&s.handicap.trim()!==''), true);
-    renderDivision('Unranked', shooters.filter(s=>!divisions.includes(s.division)), true);
-  }
-
-  // ── Shoot-off organiser ──────────────────────────────────────────────────
-  function showShootoff() {
-    shootoffContainer.innerHTML = '';
-
-    // Build processed shooter list with totals
-    const processed = shooters.map(s => {
-      const total    = s.scores.reduce((a,b)=>a+b.value,0);
-      const xCount   = s.scores.filter(sc=>sc.label==='X').length;
-      const hcapVal  = parseFloat(s.handicap)||0;
-      const hcapTotal = parseFloat((total+hcapVal).toFixed(2));
-      return { ...s, total, xCount, hcapTotal };
-    });
-
-    if (processed.length === 0) {
-      shootoffContainer.innerHTML = '<p style="text-align:center;color:#888;">No shooters in this session.</p>';
-      return;
-    }
-
-    // ── 1. Find handicap winner (highest hcapTotal) ──────────────────────
-    const withHandicap = processed.filter(s => s.handicap && s.handicap.trim() !== '');
-    withHandicap.sort((a,b) => b.hcapTotal - a.hcapTotal);
-    const handicapWinner = withHandicap.length > 0 ? withHandicap[0] : null;
-
-    // ── Handicap winner section ──────────────────────────────────────────
-    const hwSection = document.createElement('div');
-    hwSection.className = 'shootoff-section';
-    const hwTitle = document.createElement('h3');
-    hwTitle.className = 'gold';
-    hwTitle.textContent = '🏆 Handicap Winner — Progresses to Cards';
-    hwSection.appendChild(hwTitle);
-    if (handicapWinner) {
-      const winnerDiv = document.createElement('div');
-      winnerDiv.className = 'shootoff-winner';
-      winnerDiv.innerHTML = `🎯 ${handicapWinner.name}
-        <span class="shootoff-division-badge ${getDivBadgeClass(handicapWinner.division)}">${handicapWinner.division}</span>`;
-      hwSection.appendChild(winnerDiv);
-      const noteDiv = document.createElement('div');
-      noteDiv.className = 'shootoff-note';
-      noteDiv.textContent = `Handicap total: ${handicapWinner.hcapTotal} | Raw score: ${handicapWinner.total}${handicapWinner.xCount > 0 ? ` | X's: ${handicapWinner.xCount}` : ''}`;
-      hwSection.appendChild(noteDiv);
-    } else {
-      const noteDiv = document.createElement('div');
-      noteDiv.className = 'shootoff-note';
-      noteDiv.textContent = 'No archers with handicaps in this session.';
-      hwSection.appendChild(noteDiv);
-    }
-    shootoffContainer.appendChild(hwSection);
-
-    // ── 2. Shoot-off group 1: top raw scorer per division (skip hcp winner) ──
-    const so1Section = document.createElement('div');
-    so1Section.className = 'shootoff-section';
-    const so1Title = document.createElement('h3');
-    so1Title.className = 'green';
-    so1Title.textContent = '🥇 Shoot-Off Group 1 — Division Leaders';
-    so1Section.appendChild(so1Title);
-
-    const so1Shooters = [];
-    const so1Ids = new Set();
-
-    // For each named division, find top raw scorer excluding handicap winner
-    const namedDivisions = ['Open', 'A Grade', 'B Grade'];
-    namedDivisions.forEach(div => {
-      const inDiv = processed
-        .filter(s => s.division === div && s.id !== (handicapWinner ? handicapWinner.id : null))
-        .sort((a,b) => b.total - a.total || b.xCount - a.xCount);
-      if (inDiv.length > 0) {
-        so1Shooters.push({ ...inDiv[0], divLabel: div });
-        so1Ids.add(inDiv[0].id);
-      }
-    });
-
-    // Unranked: highest raw score excluding handicap winner
-    const unranked = processed
-      .filter(s => !divisions.includes(s.division) && s.id !== (handicapWinner ? handicapWinner.id : null))
-      .sort((a,b) => b.total - a.total || b.xCount - a.xCount);
-    if (unranked.length > 0) {
-      so1Shooters.push({ ...unranked[0], divLabel: 'Unranked' });
-      so1Ids.add(unranked[0].id);
-    }
-
-    if (so1Shooters.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'shootoff-note';
-      empty.textContent = 'No eligible shooters for Group 1.';
-      so1Section.appendChild(empty);
-    } else {
-      so1Shooters.forEach(s => {
-        const row = document.createElement('div');
-        row.className = 'shootoff-archer-row';
-        row.innerHTML = `
-          <span class="shootoff-archer-name">${s.name}
-            <span class="shootoff-division-badge ${getDivBadgeClass(s.divLabel)}">${s.divLabel}</span>
-          </span>
-          <span class="shootoff-archer-detail">Score: ${s.total}${s.xCount > 0 ? ` | X's: ${s.xCount}` : ''}</span>`;
-        so1Section.appendChild(row);
-      });
-    }
-    shootoffContainer.appendChild(so1Section);
-
-    // ── 3. Shoot-off group 2: everyone else except handicap winner ────────
-    const so2Section = document.createElement('div');
-    so2Section.className = 'shootoff-section';
-    const so2Title = document.createElement('h3');
-    so2Title.className = 'blue';
-    so2Title.textContent = '🥈 Shoot-Off Group 2 — Everyone Else';
-    so2Section.appendChild(so2Title);
-
-    const hwId = handicapWinner ? handicapWinner.id : null;
-    const so2Shooters = processed
-      .filter(s => s.id !== hwId && !so1Ids.has(s.id))
-      .sort((a,b) => b.total - a.total || b.xCount - a.xCount);
-
-    if (so2Shooters.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'shootoff-note';
-      empty.textContent = 'No remaining shooters for Group 2.';
-      so2Section.appendChild(empty);
-    } else {
-      so2Shooters.forEach(s => {
-        const row = document.createElement('div');
-        row.className = 'shootoff-archer-row';
-        row.innerHTML = `
-          <span class="shootoff-archer-name">${s.name}
-            <span class="shootoff-division-badge ${getDivBadgeClass(s.division)}">${s.division}</span>
-          </span>
-          <span class="shootoff-archer-detail">Score: ${s.total}${s.xCount > 0 ? ` | X's: ${s.xCount}` : ''}</span>`;
-        so2Section.appendChild(row);
-      });
-    }
-    shootoffContainer.appendChild(so2Section);
-
-    // ── Note at bottom ────────────────────────────────────────────────────
-    const note = document.createElement('p');
-    note.style.cssText = 'text-align:center; color:#888; font-size:0.85rem; margin-top:0.5rem;';
-    note.textContent = 'Ties in shoot-offs are broken by X count, then X&10 count.';
-    shootoffContainer.appendChild(note);
+    divisions.forEach(div => renderDivision(div, shooters.filter(s => s.division === div), div === 'B Grade'));
+    renderDivision('Handicap', shooters.filter(s => s.handicap && s.handicap.trim() !== ''), true);
+    renderDivision('Unranked', shooters.filter(s => !divisions.includes(s.division)), true);
   }
 
   function getDivBadgeClass(div) {
-    if (div === 'Open') return 'badge-Open';
-    if (div === 'A Grade') return 'badge-A';
-    if (div === 'B Grade') return 'badge-B';
-    return 'badge-Unranked';
+    if (div === 'Open') return 'badge-Open'; if (div === 'A Grade') return 'badge-A'; if (div === 'B Grade') return 'badge-B'; return 'badge-Unranked';
   }
 
-  // ── Export CSV ───────────────────────────────────────────────────────────
+  function showShootoff() {
+    shootoffContainer.innerHTML = '';
+    const { processed, handicapWinner, hwId, divisionWinners, unrankedWinner, so1Ids } = calcShootoffResults();
+    if (processed.length === 0) { shootoffContainer.innerHTML = '<p style="text-align:center;color:#888;">No shooters in this session.</p>'; return; }
+
+    function makeSection(titleText, titleClass) {
+      const sec = document.createElement('div'); sec.className = 'shootoff-section';
+      const h = document.createElement('h3'); h.className = titleClass; h.textContent = titleText; sec.appendChild(h);
+      return sec;
+    }
+    function makeArcherRow(name, div, score, xCount) {
+      const row = document.createElement('div'); row.className = 'shootoff-archer-row';
+      row.innerHTML = '<span class="shootoff-archer-name">' + name + ' <span class="shootoff-division-badge ' + getDivBadgeClass(div) + '">' + div + '</span></span>' +
+        '<span class="shootoff-archer-detail">Score: ' + score + (xCount > 0 ? " | X's: " + xCount : '') + '</span>';
+      return row;
+    }
+
+    // Handicap winner
+    const hwSec = makeSection('Handicap Winner - Progresses to Cards', 'gold');
+    if (handicapWinner) {
+      const wd = document.createElement('div'); wd.className = 'shootoff-winner';
+      wd.innerHTML = handicapWinner.name + ' <span class="shootoff-division-badge ' + getDivBadgeClass(handicapWinner.division) + '">' + handicapWinner.division + '</span>';
+      hwSec.appendChild(wd);
+      const nd = document.createElement('div'); nd.className = 'shootoff-note';
+      nd.textContent = 'Handicap total: ' + handicapWinner.hcapTotal + ' | Raw score: ' + handicapWinner.total + (handicapWinner.xCount > 0 ? " | X's: " + handicapWinner.xCount : '');
+      hwSec.appendChild(nd);
+    } else {
+      const nd = document.createElement('div'); nd.className = 'shootoff-note'; nd.textContent = 'No archers with handicaps in this session.'; hwSec.appendChild(nd);
+    }
+    shootoffContainer.appendChild(hwSec);
+
+    // Group 1
+    const so1Sec = makeSection('Shoot-Off Group 1 - Division Leaders', 'green');
+    const so1List = [];
+    ['Open', 'A Grade', 'B Grade'].forEach(div => { if (divisionWinners[div]) so1List.push({ ...divisionWinners[div], divLabel:div }); });
+    if (unrankedWinner) so1List.push({ ...unrankedWinner, divLabel:'Unranked' });
+    if (so1List.length === 0) {
+      const nd = document.createElement('div'); nd.className = 'shootoff-note'; nd.textContent = 'No eligible shooters for Group 1.'; so1Sec.appendChild(nd);
+    } else {
+      so1List.forEach(s => so1Sec.appendChild(makeArcherRow(s.name, s.divLabel, s.total, s.xCount)));
+    }
+    shootoffContainer.appendChild(so1Sec);
+
+    // Group 2
+    const so2Sec = makeSection('Shoot-Off Group 2 - Everyone Else', 'blue');
+    const so2List = processed.filter(s => s.id !== hwId && !so1Ids.has(s.id)).sort((a,b) => b.total - a.total || b.xCount - a.xCount);
+    if (so2List.length === 0) {
+      const nd = document.createElement('div'); nd.className = 'shootoff-note'; nd.textContent = 'No remaining shooters for Group 2.'; so2Sec.appendChild(nd);
+    } else {
+      so2List.forEach(s => so2Sec.appendChild(makeArcherRow(s.name, s.division, s.total, s.xCount)));
+    }
+    shootoffContainer.appendChild(so2Sec);
+
+    const note = document.createElement('p'); note.style.cssText = 'text-align:center;color:#888;font-size:0.85rem;margin-top:0.5rem;';
+    note.textContent = 'Ties broken by X count, then X&10 count.'; shootoffContainer.appendChild(note);
+  }
+
   document.getElementById('exportResults').addEventListener('click', () => {
     let csv = '';
-    (divisions.length>0?divisions:['Overall']).forEach(div => {
-      csv += `Division: ${div}\n`;
-      shooters.filter(s=>s.division===div).forEach(s => {
+    (divisions.length > 0 ? divisions : ['Overall']).forEach(div => {
+      csv += 'Division: ' + div + '\n';
+      shooters.filter(s => s.division === div).forEach(s => {
         const ends = chunkArray(s.scores, shotsPerEnd); const hcapValue = parseFloat(s.handicap)||0;
-        csv += 'Name,Hcap'; for (let a=1;a<=shotsPerEnd;a++) csv+=`,Arrow ${a}`; csv+=',End Total\n';
-        let overallTotal=0;
-        ends.forEach((end,i) => {
-          let line=i===0?`${s.name},${s.handicap||''}`:',' ; let endTotal=0;
-          for (let j=0;j<shotsPerEnd;j++) { if(end[j]){line+=`,${end[j].label}`;endTotal+=end[j].value;}else line+=','; }
-          line+=`,${endTotal}\n`; overallTotal+=endTotal; csv+=line;
+        csv += 'Name,Hcap'; for (let a = 1; a <= shotsPerEnd; a++) csv += ',Arrow ' + a; csv += ',End Total\n';
+        let overallTotal = 0;
+        ends.forEach((end, i) => {
+          let line = i === 0 ? s.name + ',' + (s.handicap||'') : ','; let endTotal = 0;
+          for (let j = 0; j < shotsPerEnd; j++) { if (end[j]) { line += ',' + end[j].label; endTotal += end[j].value; } else line += ','; }
+          line += ',' + endTotal + '\n'; overallTotal += endTotal; csv += line;
         });
-        csv+=`Total,,${','.repeat(shotsPerEnd)}${overallTotal}\n`;
-        csv+=`H Total,,${','.repeat(shotsPerEnd)}${overallTotal+hcapValue}\n`;
-        csv+=`Arrow Avg,,${','.repeat(shotsPerEnd)}${s.scores.length>0?(overallTotal/s.scores.length).toFixed(2):0}\n\n`;
+        csv += 'Total,,' + ','.repeat(shotsPerEnd) + overallTotal + '\n';
+        csv += 'H Total,,' + ','.repeat(shotsPerEnd) + (overallTotal+hcapValue) + '\n';
+        csv += 'Arrow Avg,,' + ','.repeat(shotsPerEnd) + (s.scores.length>0?(overallTotal/s.scores.length).toFixed(2):0) + '\n\n';
       });
     });
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-    a.download = `session_results_${new Date().toISOString().split('T')[0]}.csv`; a.click();
-    showStatus('resultsStatus','✓ CSV exported!','success');
+    a.href = URL.createObjectURL(new Blob([csv], { type:'text/csv' }));
+    a.download = 'session_results_' + new Date().toISOString().split('T')[0] + '.csv'; a.click();
+    showStatus('resultsStatus', 'CSV exported!', 'success');
   });
 
-  // ── New session ──────────────────────────────────────────────────────────
   document.getElementById('newSession').addEventListener('click', () => {
     if (confirm('Start a new session? This will clear all current data.')) { clearSessionLocal(); location.reload(); }
   });
 
-  // ── Init ─────────────────────────────────────────────────────────────────
-  renderDivisionList();
-  renderShooterDivisionOptions();
-  renderMidSessionDivisionOptions();
-  loadSessionFromLocal();
-  checkPendingOnLoad();
-  loadArchersFromSheet();
+  renderDivisionList(); renderShooterDivisionOptions(); renderMidSessionDivisionOptions();
+  loadSessionFromLocal(); checkPendingOnLoad(); loadArchersFromSheet();
 
   window.addEventListener('beforeunload', e => {
-    if (shooters.some(s=>s.scores&&s.scores.length>0) || !scoringDiv.classList.contains('hidden')) {
-      e.preventDefault(); e.returnValue='';
-    }
+    if (shooters.some(s => s.scores && s.scores.length > 0) || !scoringDiv.classList.contains('hidden')) { e.preventDefault(); e.returnValue = ''; }
   });
-  window.history.pushState(null,'',window.location.href);
+  window.history.pushState(null, '', window.location.href);
   window.addEventListener('popstate', () => {
-    if (shooters.some(s=>s.scores&&s.scores.length>0)) {
+    if (shooters.some(s => s.scores && s.scores.length > 0)) {
       if (confirm('You have unsaved scores. Go back anyway?')) window.history.back();
-      else window.history.pushState(null,'',window.location.href);
+      else window.history.pushState(null, '', window.location.href);
     }
   });
 });
