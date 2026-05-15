@@ -181,8 +181,8 @@
   </div>
   <div id="resultsStatus"></div>
   <div class="results-tabs">
-    <button class="results-tab active" id="tabResults">Results</button>
-    <button class="results-tab" id="tabShootoff">Shoot-Off</button>
+    <button class="results-tab active" id="tabResults">📊 Results</button>
+    <button class="results-tab" id="tabShootoff">🏹 Shoot-Off</button>
   </div>
   <div id="resultsContainer"></div>
   <div id="shootoffContainer" class="hidden"></div>
@@ -210,32 +210,32 @@ function getPendingUpload() {
 }
 
 window.addEventListener('load', () => {
-  const setupDiv = document.getElementById('setup');
-  const scoringDiv = document.getElementById('scoring');
-  const resultsDiv = document.getElementById('results');
-  const shooterListDiv = document.getElementById('shooterList');
-  const scorersDiv = document.getElementById('scorers');
-  const divisionListDiv = document.getElementById('divisionList');
-  const resultsContainer = document.getElementById('resultsContainer');
-  const shootoffContainer = document.getElementById('shootoffContainer');
-  const startBtn = document.getElementById('startScoring');
-  const scoreZoneSelect = document.getElementById('scoreZone');
-  const customContainer = document.getElementById('customScoreContainer');
-  const customInput = document.getElementById('customScores');
+  const setupDiv              = document.getElementById('setup');
+  const scoringDiv            = document.getElementById('scoring');
+  const resultsDiv            = document.getElementById('results');
+  const shooterListDiv        = document.getElementById('shooterList');
+  const scorersDiv            = document.getElementById('scorers');
+  const divisionListDiv       = document.getElementById('divisionList');
+  const resultsContainer      = document.getElementById('resultsContainer');
+  const shootoffContainer     = document.getElementById('shootoffContainer');
+  const startBtn              = document.getElementById('startScoring');
+  const scoreZoneSelect       = document.getElementById('scoreZone');
+  const customContainer       = document.getElementById('customScoreContainer');
+  const customInput           = document.getElementById('customScores');
   const shooterDivisionSelect = document.getElementById('shooterDivision');
-  const shooterNameInput = document.getElementById('shooterName');
-  const shooterHandicapInput = document.getElementById('shooterHandicap');
-  const startupOverlay = document.getElementById('startupOverlay');
-  const uploadOverlay = document.getElementById('uploadOverlay');
-  const uploadMsg = document.getElementById('uploadMsg');
-  const pendingBanner = document.getElementById('pendingBanner');
-  const pendingBannerText = document.getElementById('pendingBannerText');
-  const midSessionPanel = document.getElementById('midSessionPanel');
-  const midShooterName = document.getElementById('midShooterName');
-  const midShooterHandicap = document.getElementById('midShooterHandicap');
-  const midShooterDivision = document.getElementById('midShooterDivision');
-  const midShooterBackScores = document.getElementById('midShooterBackScores');
-  const endsAlreadyShot = document.getElementById('endsAlreadyShot');
+  const shooterNameInput      = document.getElementById('shooterName');
+  const shooterHandicapInput  = document.getElementById('shooterHandicap');
+  const startupOverlay        = document.getElementById('startupOverlay');
+  const uploadOverlay         = document.getElementById('uploadOverlay');
+  const uploadMsg             = document.getElementById('uploadMsg');
+  const pendingBanner         = document.getElementById('pendingBanner');
+  const pendingBannerText     = document.getElementById('pendingBannerText');
+  const midSessionPanel       = document.getElementById('midSessionPanel');
+  const midShooterName        = document.getElementById('midShooterName');
+  const midShooterHandicap    = document.getElementById('midShooterHandicap');
+  const midShooterDivision    = document.getElementById('midShooterDivision');
+  const midShooterBackScores  = document.getElementById('midShooterBackScores');
+  const endsAlreadyShot       = document.getElementById('endsAlreadyShot');
 
   function showUploadOverlay(msg) { uploadMsg.textContent = msg || 'Uploading to Google Sheets...'; uploadOverlay.classList.remove('hidden'); }
   function hideUploadOverlay() { uploadOverlay.classList.add('hidden'); }
@@ -251,11 +251,11 @@ window.addEventListener('load', () => {
       const data = JSON.parse(saved);
       const savedTime = new Date(data.timestamp);
       if ((new Date() - savedTime) / 3600000 > 12) { localStorage.removeItem('archerySession'); return false; }
-      shooters = data.shooters || [];
-      divisions = (data.divisions && data.divisions.length > 0) ? data.divisions : ['Open', 'A Grade', 'B Grade'];
-      shotsPerEnd = data.shotsPerEnd || 3;
-      scoreButtons = data.scoreButtons || [];
-      scoreMap = data.scoreMap || {};
+      shooters      = data.shooters      || [];
+      divisions     = (data.divisions && data.divisions.length > 0) ? data.divisions : ['Open', 'A Grade', 'B Grade'];
+      shotsPerEnd   = data.shotsPerEnd   || 3;
+      scoreButtons  = data.scoreButtons  || [];
+      scoreMap      = data.scoreMap      || {};
       selectedRound = data.selectedRound || '';
       if (shooters.length > 0) {
         showStatus('setupStatus', 'Restored session from ' + savedTime.toLocaleTimeString(), 'info');
@@ -347,9 +347,15 @@ window.addEventListener('load', () => {
       const span = document.createElement('span');
       span.textContent = shooter.name + ' (' + shooter.division + (shooter.handicap ? ' - Hcp:' + shooter.handicap : '') + ')';
       div.appendChild(span);
-      if (index > 0) { const upBtn = document.createElement('button'); upBtn.textContent = 'Up'; upBtn.addEventListener('click', () => moveShooter(index, -1)); div.appendChild(upBtn); }
-      if (index < shooters.length - 1) { const downBtn = document.createElement('button'); downBtn.textContent = 'Dn'; downBtn.addEventListener('click', () => moveShooter(index, 1)); div.appendChild(downBtn); }
-      const removeBtn = document.createElement('button'); removeBtn.textContent = 'X'; removeBtn.style.background = '#dc3545';
+      if (index > 0) {
+        const upBtn = document.createElement('button'); upBtn.textContent = '↑';
+        upBtn.addEventListener('click', () => moveShooter(index, -1)); div.appendChild(upBtn);
+      }
+      if (index < shooters.length - 1) {
+        const downBtn = document.createElement('button'); downBtn.textContent = '↓';
+        downBtn.addEventListener('click', () => moveShooter(index, 1)); div.appendChild(downBtn);
+      }
+      const removeBtn = document.createElement('button'); removeBtn.textContent = '✕'; removeBtn.style.background = '#dc3545';
       removeBtn.addEventListener('click', () => { shooters.splice(index, 1); if (shooters.length === 0) startBtn.classList.add('hidden'); renderShooterList(); saveSessionToLocal(); });
       div.appendChild(removeBtn); shooterListDiv.appendChild(div);
     });
@@ -455,11 +461,17 @@ window.addEventListener('load', () => {
       if (shooter.lateAddition) div.style.borderLeft = '4px solid #fd7e14';
       const nameDiv = document.createElement('div'); nameDiv.className = 'shooter-name';
       const nameSpan = document.createElement('span');
-      nameSpan.textContent = shooter.name + ' (' + shooter.division + (shooter.handicap ? ' - Hcp:' + shooter.handicap : '') + ')' + (shooter.lateAddition ? ' (late)' : '');
+      nameSpan.textContent = shooter.name + ' (' + shooter.division + (shooter.handicap ? ' - Hcp:' + shooter.handicap : '') + ')' + (shooter.lateAddition ? ' ⏱' : '');
       nameDiv.appendChild(nameSpan);
       const reorderDiv = document.createElement('div'); reorderDiv.className = 'reorder-buttons';
-      if (index > 0) { const up = document.createElement('button'); up.textContent = 'Up'; up.addEventListener('click', () => moveScoringShooter(index, -1)); reorderDiv.appendChild(up); }
-      if (index < shooters.length-1) { const dn = document.createElement('button'); dn.textContent = 'Dn'; dn.addEventListener('click', () => moveScoringShooter(index, 1)); reorderDiv.appendChild(dn); }
+      if (index > 0) {
+        const up = document.createElement('button'); up.textContent = '↑';
+        up.addEventListener('click', () => moveScoringShooter(index, -1)); reorderDiv.appendChild(up);
+      }
+      if (index < shooters.length - 1) {
+        const dn = document.createElement('button'); dn.textContent = '↓';
+        dn.addEventListener('click', () => moveScoringShooter(index, 1)); reorderDiv.appendChild(dn);
+      }
       nameDiv.appendChild(reorderDiv); div.appendChild(nameDiv);
       const arrowsDiv = document.createElement('div'); arrowsDiv.className = 'arrows'; arrowsDiv.id = 'arrows-' + sid; div.appendChild(arrowsDiv);
       const btnDiv = document.createElement('div'); btnDiv.className = 'score-buttons';
@@ -531,23 +543,23 @@ window.addEventListener('load', () => {
       ...(unrankedWinner ? [unrankedWinner.id] : [])
     ]);
     return shooters.map(shooter => {
-      const total = shooter.scores.reduce((a,b) => a+b.value, 0);
-      const xCount = shooter.scores.filter(s => s.label === 'X').length;
+      const total    = shooter.scores.reduce((a,b) => a+b.value, 0);
+      const xCount   = shooter.scores.filter(s => s.label === 'X').length;
       const x10Count = shooter.scores.filter(s => s.label === 'X' || s.label === '10').length;
-      const hcapVal = parseFloat(shooter.handicap)||0;
-      const match = archersData.find(a => (a.firstName + ' ' + a.lastName).toLowerCase().trim() === shooter.name.toLowerCase().trim());
+      const hcapVal  = parseFloat(shooter.handicap)||0;
+      const match    = archersData.find(a => (a.firstName + ' ' + a.lastName).toLowerCase().trim() === shooter.name.toLowerCase().trim());
       return {
-        date:         today,
-        uid:          match ? match.uid : '',
-        score:        total,
-        xCount:       xCount !== undefined ? xCount : 0,
-        x10Count:     x10Count !== undefined ? x10Count : 0,
+        date:          today,
+        uid:           match ? match.uid : '',
+        score:         total,
+        xCount:        xCount   !== undefined ? xCount   : 0,
+        x10Count:      x10Count !== undefined ? x10Count : 0,
         handicapScore: total + hcapVal,
-        sessionInfo:  'Week ' + getWeekNumber(),
-        elevenMScore: selectedRound === '11-M' ? total : '',
+        sessionInfo:   'Week ' + getWeekNumber(),
+        elevenMScore:  selectedRound === '11-M' ? total : '',
         roundSelected: selectedRound,
-        handicapWin:  handicapWinner && shooter.id === handicapWinner.id ? 1 : 0,
-        divisionWin:  divWinnerIds.has(shooter.id) ? 1 : 0
+        handicapWin:   handicapWinner && shooter.id === handicapWinner.id ? 1 : 0,
+        divisionWin:   divWinnerIds.has(shooter.id) ? 1 : 0
       };
     });
   }
@@ -623,9 +635,11 @@ window.addEventListener('load', () => {
   function showResults() {
     resultsContainer.innerHTML = '';
     const divisionThemes = {
-      'Open':{ header:'#b8860b', text:'#fff' }, 'A Grade':{ header:'#a00000', text:'#fff' },
-      'B Grade':{ header:'#003580', text:'#fff' }, 'Handicap':{ header:'#222222', text:'#fff' },
-      'Unranked':{ header:'#ffffff', text:'#000000', border:'2px solid #000' }
+      'Open':     { header:'#b8860b', text:'#fff' },
+      'A Grade':  { header:'#a00000', text:'#fff' },
+      'B Grade':  { header:'#003580', text:'#fff' },
+      'Handicap': { header:'#222222', text:'#fff' },
+      'Unranked': { header:'#ffffff', text:'#000000', border:'2px solid #000' }
     };
     function renderDivision(divName, list, sortByHandicap) {
       if (list.length === 0) return;
@@ -649,7 +663,7 @@ window.addEventListener('load', () => {
           ? 'Total: ' + shooter.total + ' | <span class="highlight-score">Hcap Total: ' + shooter.hcapTotal + '</span> | Avg: ' + shooter.avg + xDisp
           : '<span class="highlight-score">Total: ' + shooter.total + '</span> | Hcap Total: ' + shooter.hcapTotal + ' | Avg: ' + shooter.avg + xDisp;
         const thead = document.createElement('thead');
-        thead.innerHTML = '<tr><th colspan="' + (shotsPerEnd+2) + '" style="background:' + theme.header + 'cc; color:' + theme.text + ';"><span class="shooter-header-name" style="' + (isWinner?'text-decoration:underline;':'') + '">' + (isWinner?'Trophy ':'' ) + shooter.name + '</span>' + (shooter.handicap?' - Hcp:'+shooter.handicap:'') + ' | ' + scoreDisplay + '</th></tr>';
+        thead.innerHTML = '<tr><th colspan="' + (shotsPerEnd+2) + '" style="background:' + theme.header + 'cc; color:' + theme.text + ';"><span class="shooter-header-name" style="' + (isWinner?'text-decoration:underline;':'') + '">' + (isWinner ? '🏆 ' : '') + shooter.name + '</span>' + (shooter.handicap?' - Hcp:'+shooter.handicap:'') + ' | ' + scoreDisplay + '</th></tr>';
         table.appendChild(thead);
         const tbody = document.createElement('tbody');
         ends.forEach((endArr, i) => {
@@ -689,7 +703,7 @@ window.addEventListener('load', () => {
     }
 
     // Handicap winner
-    const hwSec = makeSection('Handicap Winner - Progresses to Cards', 'gold');
+    const hwSec = makeSection('🏆 Handicap Winner — Progresses to Cards', 'gold');
     if (handicapWinner) {
       const wd = document.createElement('div'); wd.className = 'shootoff-winner';
       wd.innerHTML = handicapWinner.name + ' <span class="shootoff-division-badge ' + getDivBadgeClass(handicapWinner.division) + '">' + handicapWinner.division + '</span>';
@@ -703,7 +717,7 @@ window.addEventListener('load', () => {
     shootoffContainer.appendChild(hwSec);
 
     // Group 1
-    const so1Sec = makeSection('Shoot-Off Group 1 - Division Leaders', 'green');
+    const so1Sec = makeSection('🥇 Shoot-Off Group 1 — Division Leaders', 'green');
     const so1List = [];
     ['Open', 'A Grade', 'B Grade'].forEach(div => { if (divisionWinners[div]) so1List.push({ ...divisionWinners[div], divLabel:div }); });
     if (unrankedWinner) so1List.push({ ...unrankedWinner, divLabel:'Unranked' });
@@ -715,7 +729,7 @@ window.addEventListener('load', () => {
     shootoffContainer.appendChild(so1Sec);
 
     // Group 2
-    const so2Sec = makeSection('Shoot-Off Group 2 - Everyone Else', 'blue');
+    const so2Sec = makeSection('🥈 Shoot-Off Group 2 — Everyone Else', 'blue');
     const so2List = processed.filter(s => s.id !== hwId && !so1Ids.has(s.id)).sort((a,b) => b.total - a.total || b.xCount - a.xCount);
     if (so2List.length === 0) {
       const nd = document.createElement('div'); nd.className = 'shootoff-note'; nd.textContent = 'No remaining shooters for Group 2.'; so2Sec.appendChild(nd);
@@ -724,8 +738,10 @@ window.addEventListener('load', () => {
     }
     shootoffContainer.appendChild(so2Sec);
 
-    const note = document.createElement('p'); note.style.cssText = 'text-align:center;color:#888;font-size:0.85rem;margin-top:0.5rem;';
-    note.textContent = 'Ties broken by X count, then X&10 count.'; shootoffContainer.appendChild(note);
+    const note = document.createElement('p');
+    note.style.cssText = 'text-align:center;color:#888;font-size:0.85rem;margin-top:0.5rem;';
+    note.textContent = 'Ties: lowest single arrow wins. If still tied, reshoot.';
+    shootoffContainer.appendChild(note);
   }
 
   document.getElementById('exportResults').addEventListener('click', () => {
